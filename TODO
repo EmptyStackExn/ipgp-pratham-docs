@@ -1,0 +1,52 @@
+TODO list
+-------------------
+
+  [OK]		Parsing de fichier Nova
+  [OK]		Plannificateur de séquences
+
+  [OK]		Récupération de données brutes à partir de NI-6353 sur une voie
+  		- tester sur plusieurs voies au niveau rapidité et syn
+		- vérifier les fréquences de récupération d'échantillons
+		- acquisition tournante : quel délai de phase entre deux canaux ?
+
+  [  ]       	Enregistrement sur fichier (gérée par Sofiane)
+      		- quel type de données allons-nous récupérer directement pour sauvegarder ? type/struc de données = « Data dynamics »...
+		- accordé aux spécifications de type de fichier ? spécifications encore valides ? NetCDF ?
+
+  [  ]		Démodulation des données
+     		- VR-5000 assure-t-il cette tâche ? démodulation FM ?
+		- -> déportation de fréquence quel retour ?
+		- démodulation OOK (On-Off Keying, fréquence porteuse = 145.980 MHz, bit rate = 1,2 kbps)
+		- démodulation FSK (
+		  	       Fe :	 fréquence d'échantillonage max = 1.00 × 10^6 ech./s (plusieurs canaux)
+		  	       F1 / F0 : fréquence porteuse = 437.455 MHz +/- 4.95 kHz pour tt/ff
+			       F1 - F0 : bandwidth = 10 kHz
+			       Fb :    	 bit rate = 2,4 kbps [ = kbit/s = kHz]
+			       	  	     	  = 2.4 × 1024 Hz (à vérifier que kbit = 1024 bit)
+			       )
+		- décodage du datagramme AX.25 avec (start-of-frame detection, pattern recognition, CRC-checking/generation, ...) (gérée par Belaid)
+
+  [  ]          Tracking du satellite avec Nova 2.2c
+     		- Nova 2.2c : http://www.nlsa.com/uploads/nfw2.2c/Full/setup.exe
+		- avec TLE spécifique de Pratham ?
+
+  [  ]	 	Mise en place d'un buffer de données avant la sauvegarde sur disque dur (pour éviter les pertes de données)
+  		- pb limite d'allocation de données en mémoire !
+		- estimer le coût des données en temps/espace : ralentissement processeur conséquent ?
+
+  [  ]		Intégrité du système
+     		- nécessité d'un onduleur ?
+		- avertisseur (envoi de mails ?)
+		- Munin sous Windows ?
+		- csq : implémenter cygwin ?
+		- serveur VNC et telnet
+		- créer des applications pour le SAFE MODE
+
+  [  ]		Passage TEC <-> geopositionnement sans l'usage de Nova
+     		- quel modèle utiliser ? Plan-13 G3RUH ou SGP4-SDP4 as per Space Track Report 3
+
+  [NON]		Récupération de données par RS-232 sur un port
+      		- tester sur plusieurs ports (4 au moins)
+      		- régler le timeout pour qu'il ne déclenche pas une exception (dans application LV)
+		- implémenter le protocole avec le VR-5000 !!!
+		- synchroniser avec toutes les acquisitions
