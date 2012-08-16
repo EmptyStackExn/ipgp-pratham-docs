@@ -140,19 +140,19 @@ Le bo\^itier d'acquisition \texttt{NI-6353}~\cite{NI_6353_datasheet}~\cite{NI_ca
 Le traitement suivant est effectu\'e aux deux voies (fl\`eches { \color{rltred}{rouges} } du sch\'ema pr\'ec\'edent). On obtient alors \`a la fin du traitement deux fichiers pour une meme information, donc plus de pr\'ecision.
 
 \begin{figure}[h]
-  \includegraphics[width=8cm]{porteuse.png}
+  \includegraphics[width=8cm]{pictures/porteuse.png}
   \caption{Porteuse (signal de fr\'equence centrale $F_c$)}
   \label{fig:signal_porteur}
 \end{figure}
 
 \begin{figure}[h]
-  \includegraphics[width=8cm]{signal_mod.png}
+  \includegraphics[width=8cm]{pictures/signal_mod.png}
   \caption{Signal modul\'e en \texttt{FSK} \`a fr\'equences $F_c \pm \frac{\Delta f}{2}$ re\c{c}u  par le \texttt{VR5000}}
   \label{fig:signal_module}
 \end{figure}
 
 \begin{figure}[h]
-  \includegraphics[width=8cm]{signal_demod.png}
+  \includegraphics[width=8cm]{pictures/signal_demod.png}
   \caption{Signal modulant \`a d\'ebit binaire $F_b = 1,2 \ \operatorname{kbit}.\operatorname{s}^{-1}$ (retrouv\'e par d\'emodulation \texttt{FSK})}
   \label{fig:signal_modulant}
 \end{figure}
@@ -165,7 +165,7 @@ Le satellite utilise une porteuse d\'eclar\'ee $F_c = 437,455$ MHz (\textsc{figu
   Les filtres du transceiver \texttt{VR5000} renvoient en sortie un signal audio (similaire au \textit{signal modulant}).
   
   \begin{figure}[h]
-    \includegraphics[width=8cm]{sans_porteuse.png}
+    \includegraphics[width=8cm]{pictures/sans_porteuse.png}
     \caption{Signal d\'emodul\'e par \texttt{FM}}
     \label{fig:geometry}
   \end{figure}
@@ -213,7 +213,7 @@ Les bits restants du d\'ecoupage sont alors les bits de donn\'ees au format d\'e
 De mani\`ere analogue, le transceiver d\'emodule un signal \`a fr\'equence centrale $F_c = 145,980$ MHz (\textsc{figure}~\ref{fig:signal_ook}). Avec un d\'ebit binaire de $F_b = 10 \ \operatorname{bit}.\operatorname{s}^{-1}$, la pr\'esence de la composante fr\'equentielle $F_c$ indique une impulsion et, celle de la composante $0$, aucune impulsion (On-Off Keying) (\textsc{figure}~\ref{fig:impulsions_morse}).
 
 \begin{figure}[h]
-  \includegraphics[width=8cm]{sans_porteuse.png}
+  \includegraphics[width=8cm]{pictures/sans_porteuse.png}
   \caption{Signal modul\'e en \texttt{OOK} \`a fr\'equence $F_c$ re\c{c}u par le \texttt{VR5000}}
   \label{fig:signal_ook}
 \end{figure}
@@ -252,7 +252,7 @@ Huit voies (fl\`eches { \color{oneblue}{bleues} } du sch\'ema pr\'ec\'edent) son
 \subsection{Contr\^ole motoris\'e de l'antenne}
 
 \begin{figure}[h]
-  \includegraphics[width=8cm]{nova3.png}
+  \includegraphics[width=8cm]{pictures/nova3.png}
 \caption{Logiciel \texttt{Nova} de NLSA}
 \label{fig:geometry}
 \end{figure}
@@ -317,7 +317,7 @@ L'algorithme suivant (\textsc{algorithme}~\ref{algo_timer}, \textsc{impl\'ementa
 \end{algorithm}
 
 \begin{figure*}[]
-  \includegraphics[width=17.5cm]{minuterie.png}
+  \includegraphics[width=17.5cm]{pictures/minuterie.png}
 \caption{Impl\'ementation de la minuterie en LabVIEW}
 \label{fig:algo_timer_labview}
 \end{figure*}
@@ -381,7 +381,7 @@ Soit $x : I \rightarrow \mathbb{R}, t \mapsto x(t)$ un signal \`a $N$ \'echantil
 %\end{notation}
 
 \begin{figure}[h]
-  \includegraphics[width=2.5cm]{DAQ_Assistant.png}
+  \includegraphics[width=2.5cm]{pictures/DAQ_Assistant.png}
 \caption{Fonction \texttt{DAQ Assistant}}
 \label{fig:NI_DAQ_Assitant}
 \end{figure}
@@ -507,7 +507,7 @@ On propose un algorithme (\textsc{algorithme}~\ref{algo_numerisation_FSK}, \text
 
 
 \begin{figure*}[]
-  \includegraphics[width=15cm]{numerisation_amplitude.PNG}
+  \includegraphics[width=15cm]{pictures/numerisation_amplitude.png}
 \caption{Impl\'ementation du num\'erisateur d'amplitudes en LabVIEW}
 \label{fig:algo_numerisation_FSK_labview}
 \end{figure*}
@@ -861,7 +861,7 @@ On d\'efinit sur $\mathbb{M}$ la longueur d'une lettre $x \in \mathbb{M}$ comme 
 
 
 \begin{figure}[h]
-  \includegraphics[width=6cm]{morse.png}
+  \includegraphics[width=6cm]{pictures/morse.png}
 \caption{Alphabet du code Morse}
 \label{fig:morse}
 \end{figure}
@@ -869,7 +869,7 @@ On d\'efinit sur $\mathbb{M}$ la longueur d'une lettre $x \in \mathbb{M}$ comme 
 \textbf{Impl\'ementation.} On impl\'emente tout d'abord un transducteur fini qui sur l'alphabet $\mathbb{B} = {\cdot, -}$ reconnait un mot sur $\mathbb{B}$ et retourne la lettre associee a son codage en Morse. Le transducteur est donn\'e en \textsc{figure} ~\ref{fig:transducteur_morse}.
 
 \begin{figure*}
-  \includegraphics[width=17cm]{Morse_code_tree3.png}
+  \includegraphics[width=17cm]{pictures/Morse_code_tree3.png}
 \caption{Transducteur fini associ\'e au d\'ecodage \textsc{morse}~\cite{copyright_transducteur_morse}}
 \label{fig:transducteur_morse}
 \end{figure*}
@@ -1036,7 +1036,7 @@ LabVIEW, \'etant langage de programmation peu adap\'e \`a certains paradigmes, n
 \end{algorithm}
 
 \begin{figure*}[]
-  \includegraphics[width=17cm]{parser_nova_labview.png}
+  \includegraphics[width=17cm]{pictures/parser_nova_labview.png}
 \caption{Impl\'ementation d'une analyse formatt\'ee en LabVIEW}
 \label{fig:algo_scan_parse_nova_labview}
 \end{figure*}
