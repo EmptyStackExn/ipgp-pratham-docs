@@ -1,11 +1,11 @@
 IPGP's ground station for Pratham satellite software system documentation 
 ==============
 
-[Pratham](http://www.aero.iitb.ac.in/pratham/) is upcoming Indian student satellite which will be launched in 2013 by the [Indian Institute of Technology, Bombay](http://www.iitb.ac.in/). The [Institut de Physique du Globe de Paris](http://ipgp.fr/) is a French governmental research establishment involved in the ground station project for the satellite. The [Equipe Pratham](http://spacecampus-paris.eu/index.php?option=com_content&view=article&id=87&Itemid=87&lang=fr) - jointly funded by the Université Paris Diderot, the PPF Campus spatial Paris Diderot and the CNES - is a student team in charge of the development of the ground station.
+[Pratham](http://www.aero.iitb.ac.in/pratham/) is an upcoming Indian student satellite which will be launched in 2013 by the [Indian Institute of Technology, Bombay](http://www.iitb.ac.in/). The [Institut de Physique du Globe de Paris](http://ipgp.fr/) is a French governmental research establishment involved in the ground station project for the satellite. The [Equipe Pratham](http://spacecampus-paris.eu/index.php?option=com_content&view=article&id=87&Itemid=87&lang=fr) - jointly funded by the [Université Paris Diderot](http://www.univ-paris-diderot.fr), the [PPF Campus spatial Paris Diderot](http://www.campusspatial-paris.fr/) and the [CNES](http://www.cnes.fr) - is a student team in charge of the development of the ground station.
 
 This documentation gathers all information on technical issues about software development and signal processing.
 
-Usage of ipgp-pratham-doc is allowed under the terms listed in LICENSE section at the bottom of this file.
+Usage of `ipgp-pratham-doc` is allowed under the terms listed in LICENSE section at the bottom of this file.
 
 
 Downloading and building
@@ -13,7 +13,7 @@ Downloading and building
 
 To download you can click upon or type the following in the Terminal:
 
-	git clone git://github.com/EmptyStackExn/ipgp-pratham-doc.git
+	git clone git@github.com:EmptyStackExn/ipgp-pratham-doc.git
 
 The directory `./ipgp-pratham-doc` is created within you can find `DTL_Pratham_SoftwareEng.pdf`.
 
@@ -31,7 +31,7 @@ If you wish to contribute, please feel free to send any comments or suggestions 
 Minimum system requirements
 ---------------------------
 
-- TeX Live 2012
+- [TeX Live 2012](http://www.tug.org/texlive/)
 
 LICENSE
 =======
