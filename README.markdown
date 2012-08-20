@@ -1,5 +1,7 @@
-IPGP's ground station for Pratham satellite software system documentation 
+Software system documentation for Pratham satellite ground station at IPGP
 ==============
+
+![IPGP](http://s10.postimage.org/fcvyrd0f9/Logo_IPGP.png) ![P7](http://www.liafa.jussieu.fr/~lmagnin/images/Logo_Paris7.png) ![CNES](http://s11.postimage.org/dtmbxhb9d/Logo_cnes.jpg) ![CSPD](http://s10.postimage.org/6d55ce8h1/logo_cspd.gif)
 
 [Pratham](http://www.aero.iitb.ac.in/pratham/) is an upcoming Indian student satellite which will be launched in 2013 by the [Indian Institute of Technology, Bombay](http://www.iitb.ac.in/). The [Institut de Physique du Globe de Paris](http://ipgp.fr/) is a French governmental research establishment involved in the ground station project for the satellite. The [Equipe Pratham](http://spacecampus-paris.eu/index.php?option=com_content&view=article&id=87&Itemid=87&lang=fr) - jointly funded by the [Université Paris Diderot](http://www.univ-paris-diderot.fr), the [PPF Campus spatial Paris Diderot](http://www.campusspatial-paris.fr/) and the [CNES](http://www.cnes.fr) - is a student team in charge of the development of the ground station.
 
@@ -41,3 +43,4 @@ The copyright to this code and its contents are held by Institut de Physique du 
 THIS DOCUMENT IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Hai Nguyen Van <nguyenva@informatique.univ-paris-diderot.fr>
+
