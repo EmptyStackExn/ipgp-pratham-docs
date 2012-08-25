@@ -102,7 +102,7 @@ The following application note introduces technical issues related to the contro
 
 \textbf{Warning.} Section marks { \color{rltred}{\Radioactivity} } give scientific arguments but not necessarily relevant information for the understanding of this document. Some algorithm implementation details have been omitted for more abstraction towards specific programming languages.
 
-\subsection{Sch\'ema d'acquisition g\'en\'eral}
+\subsection{General overview}
 
 The \texttt{NI-6353}~\cite{NI_6353_datasheet}~\cite{NI_calibration_procedure} Acquisition Box (considered as an ADC) acquires twelve voltage measurements in volt (V).
 
@@ -161,9 +161,7 @@ The following process is applied to the two channels specified by { \color{rltre
 
 The satellite sends a signal with a declared carrier signal at $F_c = 437,455$ MHz (\textsc{figure}~\ref{fig:signal_porteur}) and a passband bandwidth of $\Delta f = 9,90$ kHz (ref ?). At the end of the acquisition chain the \textsc{vr5000} transceiver acquires a signal whose central frequency is $F_c$ and whose passband bandwidth is $\Delta f$ (\textsc{figure}~\ref{fig:signal_module}).
 
-The transceiver returns an audio signal. It finally decribes $-$ through a Schmitt trigger (ref ?) $-$ the modulating signal (\textsc{figure}~\ref{fig:signal_modulant}). The digital baseband transmission method is of the kind non-return-to-zero (\textsc{nrz})~\cite{nrz_gorry} (ref ?). The data bits are then saved in a file in such a way that (more info on peak sync ? method not sure...)
-
-La d\'emodulation effectu\'ee par le transceiver renvoie un signal audio, correspondant directement au \textit{signal modulant} (\textsc{figure}~\ref{fig:signal_modulant}). Les changements d'\'etats codent les bits de donn\'ees en NRZ~\cite{nrz_gorry}. Ces bits de donn\'ees sont par la suite enregistr\'es dans un fichier de telle fa\c{c}on que $-$ sur une p\'eriode $T_b$ $-$ la pr\'esence d'une amplitude positive non-n\'egligeable (moyenne du signal sur une dur\'ee $T_b$) corresponde au \texttt{1} logique et son l'amplitude nulle au \texttt{0}. Ces bits de donn\'ees sont par la suite enregistr\'es dans un fichier (\textsc{figure}~\ref{fig:bits_donnees}).
+The transceiver returns an audio signal. It finally decribes $-$ through a Schmitt trigger (ref ?) $-$ the modulating signal (\textsc{figure}~\ref{fig:signal_modulant}). The digital baseband transmission method is of the kind non-return-to-zero (\textsc{nrz})~\cite{nrz_gorry} (ref ?). The data bits are then saved in a file (\textsc{figure}~\ref{fig:bits_donnees}) in such a way that (more info on peak sync ? method not sure...) on a time length $T_b$, the highest mean amplitude of a frequency would match its logical \texttt{0} or \texttt{1}.
 
 %On termine la d\'emodulation \texttt{FSK} en calculant, par \textit{transform\'ee de Fourier}, les amplitudes associ\'ees aux composantes fr\'equentielles $0$ et $1,2$ kHz sur une largeur de fen\^etre de calcul $\Delta t = \frac{1}{F_b}$.
 
@@ -171,19 +169,19 @@ La d\'emodulation effectu\'ee par le transceiver renvoie un signal audio, corres
   \begin{tabular}{|c|}
     \hline
     $\dots$
-    \textcolor{rltred}{$\underbrace{\texttt{01111110}}_{\textup{debut de trame}}$}
+    \textcolor{rltred}{$\underbrace{\texttt{01111110}}_{\textup{packet start}}$}
     $\dots$
     \textcolor{rltgreen}{$\underbrace{\texttt{10101010}}_{\textup{information}}$}
     $\dots$
-    \textcolor{rltred}{$\underbrace{\texttt{01111110}}_{\textup{fin de trame}}$}
+    \textcolor{rltred}{$\underbrace{\texttt{01111110}}_{\textup{packet end}}$}
     $\dots$\\
     \hline
   \end{tabular}
-\caption{Bits de donn\'ees correspondant au signal modulant}
+\caption{Data bits associated to the modulating signal}
 \label{fig:bits_donnees}
 \end{figure}
 
-On ne s'int\'eresse cependant qu'\`a une partie des bits de donn\'ees. L'information issue du satellite $-$ cod\'ee en \texttt{AX.25} $-$ assure une fiabilit\'e dans la transmission de l'information. On d\'ecoupe alors les bits en donn\'ees en trames (\textsc{figure}~\ref{fig:bits_sans_ax25}).
+We decode data bits from the \textsc{ax.25} data link layer protocol (\textsc{figure}~\ref{fig:bits_sans_ax25}).
 
 \begin{figure}[h]
   \begin{tabular}{|c|}
@@ -191,23 +189,23 @@ On ne s'int\'eresse cependant qu'\`a une partie des bits de donn\'ees. L'informa
     $\dots$ \textcolor{rltgreen}{\texttt{10101010}} $\dots$\\
     \hline
   \end{tabular}
-  \caption{Bits de donn\'ees d\'ecod\'ees des trames \texttt{AX.25}}
+  \caption{Data bits decoded from \texttt{AX.25} packets}
   \label{fig:bits_sans_ax25}
 \end{figure}
 
-Les bits restants du d\'ecoupage sont alors les bits de donn\'ees au format d\'efinies par l'\textsc{iitb}\cite{IITB}.
+At the end of the process we evaluate data bits as defined by \textsc{iitb}'s specification\cite{IITB}.
 
-\subsection{Signal num\'erique \`a 145,980 MHz : Beacon}
+\subsection{Digital signal at 145,980 MHz : Beacon}
 
-De mani\`ere analogue, le transceiver d\'emodule un signal \`a fr\'equence centrale $F_c = 145,980$ MHz (\textsc{figure}~\ref{fig:signal_ook}). Avec un d\'ebit binaire de $F_b = 10 \ \operatorname{bit}.\operatorname{s}^{-1}$, la pr\'esence de la composante fr\'equentielle $F_c$ indique une impulsion et, celle de la composante $0$, aucune impulsion (On-Off Keying) (\textsc{figure}~\ref{fig:impulsions_morse}).
+In the same way the transceiver demodulates a signal of central frequency $F_c = 145,980$ MHz (\textsc{figure}~\ref{fig:signal_ook}). Considering a bit rate of $F_b = 10 \ \operatorname{bit}.\operatorname{s}^{-1}$, the presence of the amplitude associated to the frequency component $F_c$ matches with a pulse and the abscence with no pulse as specified by \textsc{on-off keying} (\textsc{figure}~\ref{fig:impulsions_morse}).
 
 \begin{figure}[h]
   \includegraphics[width=8cm]{pictures/sans_porteuse.png}
-  \caption{Signal modul\'e en \texttt{OOK} \`a fr\'equence $F_c$ re\c{c}u par le \texttt{VR5000}}
+  \caption{Modulated signal in \textsc{ook} of fr\'equency $F_c$ received by the transceiver}
   \label{fig:signal_ook}
 \end{figure}
 
-On d\'echiffre ensuite l'information cod\'ee en morse suivant la longueur des impulsions (trait long ou trait court) suivant le syst\`eme de codage international (\textsc{figure}~\ref{fig:info_decode_morse}).
+We demodulate the digital baseband transmission method considering that a logical \texttt{1} matches with a pulse of a time length that equals to a \textsc{dit} with \textsc{dits}, \textsc{dah} and $\varepsilon$ (no impulse) (\textsc{figure}~\ref{fig:impulsions_morse}).
 
 \begin{figure}[]
   \begin{tabular}{|c|}
@@ -215,9 +213,11 @@ On d\'echiffre ensuite l'information cod\'ee en morse suivant la longueur des im
     $\dots$ \textcolor{rltred}{\texttt{...- ..- ..--- -- -.. --.-}} $\dots$\\
     \hline
   \end{tabular}
-  \caption{Signal num\'eris\'e correspondant \`a des impulsions}
+  \caption{Digitized signal associated to pulses}
   \label{fig:impulsions_morse}
 \end{figure}
+
+We finally decode \textsc{morse} to retrieve the information on two channels ({ \color{rltgreen}{green} } arrows on the previous flowchart). We have two files with the same information.
 
 \begin{figure}[]
   \begin{tabular}{|c|}
@@ -225,68 +225,69 @@ On d\'echiffre ensuite l'information cod\'ee en morse suivant la longueur des im
     $\dots$ \textcolor{rltgreen}{\texttt{VU2MDQ}} $\dots$\\
     \hline
   \end{tabular}
-  \caption{Information d\'ecod\'ee du code morse}
+  \caption{\textsc{Morse} decoded information}
   \label{fig:info_decode_morse}
 \end{figure}
 
-On applique alors un tel traitement aux deux voies (fl\`eches { \color{rltgreen}{vertes} } sur le sch\'ema pr\'ec\'edent) afin d'obtenir deux informations et donc plus de pr\'cision.
+\subsection{Gain and phase detection : TEC information}
 
-\subsection{Rapports de gain et de phase : information sur le TEC}
+Eight channels ({ \color{oneblue}{blue} } arrows on the previous flowchart) will allow us to acquire the \textsc{ad8302} Gain and Phase Detectors. We directly save voltage measurements in a file. \textsc{tec} retrieving will be done as post-processing with an external Matlab program.
 
-Huit voies (fl\`eches { \color{oneblue}{bleues} } du sch\'ema pr\'ec\'edent) sont d\'edi\'es \`a l'acquisition de rapports de gain et de phase, issus des \texttt{AD8302}. On enregistre directement en fichier les mesures de tensions des huit voies restantes. Un post-traitement de ces valeurs sera effectu\'e avec Matlab afin de r\'ecup\'erer l'information sur le \textsc{tec}.
-
-\section{Th\'eories et impl\'ementations}
+\section{Theory and Implementations}
 \label{sec:theory}
 
-\subsection{Contr\^ole motoris\'e de l'antenne}
+\subsection{Antenna rotor control}
 
 \begin{figure}[h]
   \includegraphics[width=8cm]{pictures/nova3.png}
-\caption{Logiciel \texttt{Nova} de NLSA}
-\label{fig:geometry}
+\caption{NLSA Nova software}
+\label{fig:nlsa_nova}
 \end{figure}
 
-Le contr\^ole de la position des axes de l'antenne est enti\`erement g\'er\'ee par le logiciel \texttt{NLSA Nova}~\cite{nova_um}. Le contr\^oleur de l'antenne \'etant reli\'e \`a l'ordinateur par \texttt{RS-232}, Nova g\`ere \`a la fois :
-\begin{itemize}
-\item{la gestion et la mise \`a jour de la base de donn\'ees sur les positions des satellites (\href{https://www.space-track.org}{Space-Track});}
-\item{la g\'en\'eration d'informations sur les e\'le\'vations minimales et maximales de satellites ;}
-\item{le contr\^ole moteur de l'antenne suivant la trajectoire du satellite d\'esir\'e dans le r\'ef\'erentiel de l'antenne.}
-\end{itemize}
+The antenna rotor will be entirely managed by NLSA Nova software~\cite{nova_um} will send commands through \textsc{rs-232} communication port to the \textsc{gs-232b} (ref ?) micro-controller (wired to the \textsc{gs ?} (ref ?) antenna rotor). This software manages:
+\begin {itemize}
+\item {orbital elements database and automatic updates from \href{https://www.space-track.org}{Space-Track} ;}
+\item {AOS and LOS time information generation ;}
+\item {antenna rotor control (\textsc{azimuth} and \textsc{elevation} parameters) following satellite trajectory.}
+\end {itemize}
 
 \begin{remark}
-  Pour les d\'etails techniques sur la mise en route de \texttt{Nova}, cf. \textsc{Appendix II}.
+  Technical details on the software usage can be found at \textsc{Appendix II}.
 \end{remark}
 
-\subsection{Gestion du temps et minuterie}
+\subsection {Earth orbit model}
 
-\textbf{Technique.} Les donn\'ees de temps n\'ecessaires \`a la mise en route de la minuterie sont fournies par \texttt{Nova} (fichier \texttt{Nova listing data.TXT}) en suivant la proc\'edure suivante :
+The Earth orbit model chosen is \textsc{sgp4/sdp4} model for the following reasons: (ref ?)
+
+\subsection {Time-based job scheduling}
+
+\textbf{Method.}
+AOS and LOS time information files can be generated by Nova (usual file name \texttt{Nova listing data.TXT}) as specified below:
 \begin{enumerate}
-\item {Choisir le satellite et le r\'ef\'erentiel de pr\'ef\'erence (\texttt{Configure current view})}
+\item {Choose the satellite and the observer (\texttt{Configure current view})}
 \item {\textup{Utilities} $\rightarrow$ \textup{Listing}}
 \item {\textup{One Observer AOS/LOS} $\rightarrow$ \textup{ReCalc}}
 \item {\textup{Capture Listing} $\rightarrow$ \textup{ASCII Text File} (Entire listing)}
 \end{enumerate}
 
-Par les \'etapes d'analyses lexicales et syntaxiques sur ce fichier, le logiciel-mère renvoie un ensemble de s\'equences d'acquisition.
-
 \begin{remark}
   { \color{rltred}{\Radioactivity} }
-  \textsc{(syntaxe des fichiers de description d'\'eclipse de Nova)}
-  Les informations d'\'el\'evation min/max d'un satellite renvoy\'ees par le logiciel Nova sont enregistr\'ees par ce dernier dans une syntaxe dont on donne la grammaire en forme Backus$-$Naur \'etendue~\cite{EBNF} (\textsc{figure}~\ref{fig:EBNF_Nova}).
+  \textsc{(aos/los time information syntax)}
+  AOS and LOS time informations returned by Nova are saved in a syntax whose grammar is given in Extended Backus$-$Naur Form (\textsc{ebnf})~\cite{EBNF} (\textsc{figure}~\ref{fig:EBNF_Nova}).
 \end{remark}
 
 \begin{remark}
-  \textsc{(fuseau horaire)}
-  Pour des raisons de commodit\'es d'impl\'ementation, on suppose que la machine est configur\'ee au fuseau horaire \texttt{UTC} ou \texttt{GMT+0}.
+  \textsc{(time zone)}
+  For software implementation convenience, we assume the machine time zone is configured at \texttt{UTC} or \texttt{GMT+0}.
 \end{remark}
 
 \begin{definition}
   { \color{rltred}{\Radioactivity} }
-  \textsc{(s\'equence d'acquisition)}
-  Une \textit{s\'equence d'acquisition} est un couple de temps correspondant respectivement \`a la date de d\'ebut d'acquisition et \`a la date de fin d'acquisition. On note $\mathcal{S}$ un ensemble de s\'equences d'acquisition ordonn\'e.
+  \textsc{(acquisition sequence)}
+  An \textit{acquisition sequence} is specified by a couple of times which respectively match the AOS and the LOS. We label $\mathcal{S}$ a set of ordered acquisition sequences specification.
 \end{definition}
 
-L'algorithme suivant (\textsc{algorithme}~\ref{algo_timer}, \textsc{impl\'ementation~\ref{fig:algo_timer_labview}}) est propos\'e afin d'impl\'ementer une minuterie qui d\'eclenche une s\'equence d'acquisition.
+We suggest the following algorithm (\textsc{algorithme}~\ref{algo_timer}, \textsc{impl\'ementation~\ref{fig:algo_timer_labview}}) to implement a time-based scheduler for continuous acquisitions from AOS to LOS.
 
 \begin{algorithm}[h]
 \caption{Minuterie}
