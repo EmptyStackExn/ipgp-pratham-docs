@@ -324,7 +324,7 @@ We suggest the following algorithm (\textsc{algorithm}~\ref{algo_timer}, \textsc
   (\textsc{acquisition window length})
   The \textit{acquisition window length} is the time duration of one acquisition of $N$ samples at a sampling rate of $F_e$ given by the formula
   \begin{eqnarray*}
-    \Delta t = \frac{N}{F_e}
+    \Delta t \overset{\underset{\Delta}{}}{=} \frac{N}{F_e}
   \end{eqnarray*}
 \end{definition}
 
@@ -378,7 +378,7 @@ We suggest to introduce some denotations for further configurations.
 \end{itemize}
 
 \begin{remark}
-  (\textsc{FIFO memory})
+  (\textsc{fifo memory})
   The NI USB-6353 Acquisition Box has a \textsc{fifo} memory size of $4095$ samples~\cite{NI_6353_datasheet} (consequence ?).
 \end{remark}
 
@@ -404,19 +404,25 @@ Assuming the \textsc{fm} demodulation process done by the transceiver, the sampl
   Le th\'eor\`eme \'enonce que, pour un signal num\'erique, la fr\'equence d'acquisition de base th\'eorique est de $0,5$ Hz par baud. En pratique, il faudrait au moins entre $0,7$ et $0,8$ Hz par baud\cite{FV}.
 \end{remark}
 
-Le bo\^itier d'acquisition \texttt{NI-6353} peut fournir une fr\'equence d'\'echantillonage de $1$ M\'ech./s sur plusieurs voies~\cite{NI_6353_datasheet}. L'acquisition de toutes les voies devant \^etre quasi-simulaltan\'ee, il para\^it trivial que toutes les voies soient au moins \'echantillon\'ees \`a $2 \times 2,4 \times 10^3 = 4,8 \times 10^3$ Hz (par application du th\'or\`eme pr\'ec\'edent). On note cependant que certains \textsc{dsp} ne se limitent qu'\`a $4 \times F_c$ pour des raisons de surcharge de calculs~\cite{TI_MSP430}.
+The \textsc{ni usb-6353} Acquisition Box on multi-channel is able to deliver a maximum sampling rate (aggregate) on multi-channel~\cite{NI_6353_datasheet} of
+\begin{eqnarray*}
+  F_{e_{\text{MAX}}} &=& 1.00 \text{ MS.s$^{-1}$}\\
+                &=& 1.00 \times 10^6 \text{ Hz}
+\end{eqnarray*}
+
+L'acquisition de toutes les voies devant \^etre quasi-simulaltan\'ee, il para\^it trivial que toutes les voies soient au moins \'echantillon\'ees \`a $2 \times 2,4 \times 10^3 = 4,8 \times 10^3$ Hz (par application du th\'or\`eme pr\'ec\'edent). On note cependant que certains \textsc{dsp} ne se limitent qu'\`a $4 \times F_c$ pour des raisons de surcharge de calculs~\cite{TI_MSP430}.
 
 En consid\'erant un post-traitement des op\'erations de nu\'erisation des signaux, on peut alors, pour des raisons de pr\'ecision de mesures, \'echantilloner chacune des voies \`a 10 kHz.
 
-\subsection{D\'etection de composante fr\'equentielle et transform\'ee de Fourier}
+\subsection{Frequency component detection}
 
-{ \color{rltred}{\Radioactivity} } This section can be omitted from the understanding of the software system. It is only suggested as a reminder for the use of \textsc{fft}-based \textsc{spectrum analyzers}.
+{ \color{rltred}{\Radioactivity} } This section may be omitted from the understanding of the software system. It is only suggested as a reminder for the use of \textsc{fft}-based \textsc{spectrum analyzers}.
 
 \begin{definition}
 \textsc{(frequency spectrum)}
 Let $\mathcal{F}$ be the discrete Fourier transform of an integrable fonction on $\mathbb{R}$ and $\hat{x} = \mathcal{F}(x) = \left [ k \mapsto \hat{x}(k)\right ]$ the \textit{frequency spectrum} of $x$ (at the $k$th sample). We have\cite{Senlis} :
 \begin{eqnarray*}
-\hat{x}(k) &=& \sum^{N - 1}_{n = 0}{x(n)e^{\frac{-2ik \pi n}{N}}}\\
+\hat{x}(k) &\overset{\underset{\Delta}{}}{=}& \sum^{N - 1}_{n = 0}{x(n)e^{\frac{-2ik \pi n}{N}}}\\
            &=& \sum^{N - 1}_{n = 0}{x(n)\cos \left ( \frac{2k \pi n}{N} \right )} - i\sum^{N - 1}_{n = 0}{x(n)\sin \left ( \frac{2k \pi n}{N} \right )}
 \end{eqnarray*}
 \end{definition}
@@ -425,32 +431,31 @@ We denote $A (f)$ the amplitude of the frequency component $f$.
 
 \begin{proposition}
 \textsc{(amplitude)}
-The Fourier transform of a signal of $N$ samples is a 
-La transform\'ee de Fourier d'un signal \`a $N$ \'echantillons est une application qui \`a un indice $k$ ($k \in [0 ; N - 1]$) associe le spectre de la fr\'equence $f$ tel que $f = \frac{k.F_e}{N}$.
+The Fourier transform of a signal of $N$ samples is a map which for an index $k \in \{0 ; N - 1\}$ associates the amplitude of the frequency $f$ such that $f = \frac{k.F_e}{N}$.
 \end{proposition}
 
-On a alors que\cite{Senlis} :
+We then have\cite{Senlis} :
 \begin{eqnarray*}
-  A (f) &=& \left \| \hat{x} \left (\frac{f.N}{F_e} \right ) \right \|\\
-           &=& \sqrt{\mathfrak{Re} \left ( \hat{x} \left (\frac{f.N}{F_e} \right ) \right )^2 + \mathfrak{Im} \left ( \hat{x} \left (\frac{f.N}{F_e} \right ) \right )^2}
+  A (f) &\overset{\underset{\Delta}{}}{=}& \left \| \hat{x} \left (\frac{f.N}{F_e} \right ) \right \|\\
+        &=& \sqrt{\mathfrak{Re} \left ( \hat{x} \left (\frac{f.N}{F_e} \right ) \right )^2 + \mathfrak{Im} \left ( \hat{x} \left (\frac{f.N}{F_e} \right ) \right )^2}
 \end{eqnarray*}
 
-\subsection{D\'emodulation \texttt{FSK}}
+\subsection{FSK demodulation}
 
-En consid\'erant que les op\'erations de d\'emodulation \texttt{FSK} sont r\'ealis\'ees par le transceiver \texttt{VR5000}, on propose l'algorithme suivant afin de num\'eriser les amplitudes associ\'ees aux composantes fr\'equentielles d'un signal \`a partir d'une liste de $N$ mesures de tensions.
+We assume \textsc{fsk} demodulation to be made by the \textsc{vr5000} Transceiver. We only suggest a simple algorithm for signal digitizing.
 
 \begin{proposition}
-  \textsc{(\'echantillons)}
-  Sachant que l'on souhaite d\'etecter la pr\'esence du \texttt{1} ou du \texttt{0} logique sur un temps $\Delta t = \frac{1}{F_b}$. On a :
+  \textsc{(samples per window)}
+  We denote $N_w$ the number of samples per calculation window. Assume one logic bit on a time duration $\Delta t = \frac{1}{F_b}$. We have:
   \begin{eqnarray}
-    N = \frac{F_e}{F_b}
+    N_w = \frac{F_e}{F_b}
   \end{eqnarray}
 
-L'algorithme suivant doit alors \^etre ex\'ecut\'e sur un signal \`a $\frac{F_e}{F_b}$ valeurs.
+  The calculation window length (expressed in number of samples) of the digitizer is $\frac{F_e}{F_b}$.
 \end{proposition}
 
 \noindent
-\textbf{Id\'ee.}
+\textbf{Idea.}
 \textsc{(num\'erisation fsk)}
   On cherche, \`a partir d'un signal compos\'e de deux amplitudes, \`a distinguer celle ayant l'occurence la plus r\'eguli\`ere. On peut alors calculer la moyenne du signal et v\'erifier si cette valeur ``se rapproche plus'' d'une amplitude ou d'une autre autre.
 
@@ -464,17 +469,17 @@ On propose un algorithme (\textsc{algorithme}~\ref{algo_numerisation_FSK}, \text
   \end{eqnarray*}
 
 \begin{proposition}
-  \textsc{(formule de la moyenne)}
-  Soient $N \in \mathbb{N}$ et $f : \left \{ 0 ; \dots ; N - 1 \right \} \rightarrow \mathbb{R}$ un signal \`a $N$ \'echantillons. On d\'efinit la moyenne du signal $f$ par la fonction :
+  \textsc{(mean formula)}
+  Let $N \in \mathbb{N}$ and $x : \left \{ 0 ; \dots ; N - 1 \right \} \rightarrow \mathbb{R}$ a signal of $N$ samples. We denote the \textit{mean of the signal} $x$ with:
   \begin{eqnarray*}
     \mathbb{R}^{\left \{ 0 ; \dots ; N - 1 \right \}} &\rightarrow& \mathbb{R}\\
-    \operatorname{moyenne} : f &\mapsto& \frac{1}{N}\sum^{N - 1}_{i = 0}{f(i)}
+    \operatorname{mean} : x &\mapsto& \frac{1}{N}\sum^{N - 1}_{i = 0}{f(i)}
   \end{eqnarray*}
 \end{proposition}
 
 \noindent
-\textbf{Sp\'ecification.}
-  Lors de l'\'ecriture des bits de donn\'ees, la d\'etection de l'amplitude associ\'e \`a la composante $f_0$ (combien?) indique le \texttt{0} logique tandis que celle associ\'ee \`a $f_1$ (combien?) indique le \texttt{1}~\cite{Comment1}.
+\textbf{Specification.}
+  The digital baseband transmission method is of the kind non-return-to-zero (\textsc{nrz}). In other words, logical \texttt{1} matches with one significant condition and logical \texttt{0} with another.
 
 \begin{algorithm}[h]
 \caption{Num\'erisation FSK}
@@ -493,13 +498,9 @@ On propose un algorithme (\textsc{algorithme}~\ref{algo_numerisation_FSK}, \text
 
 \begin{figure*}[]
   \includegraphics[width=15cm]{pictures/numerisation_amplitude.png}
-\caption{Impl\'ementation du num\'erisateur d'amplitudes en LabVIEW}
+\caption{Implementation of a signal digitizer in LabVIEW}
 \label{fig:algo_numerisation_FSK_labview}
 \end{figure*}
-
-%\begin{remark}
-%  Lors de l'\'ecriture des bits de donn\'ees, la d\'etection de la composante $F_c + \frac{\Delta f}{2}$ indique la n\'gation du bit pr\'ec\'edent tandis que $F_c - \frac{\Delta f}{2}$ indique le bit similaire au pr\'ec\'edent.
-%\end{remark}
 
 %\begin{definition}
 %  Soient $x$ un signal de largeur de fen\^etre de calcul $\Delta t = \frac{1}{F_b}$ et $\mathbb{B} = \{\texttt{0}, \texttt{1}\}$ un alphabet. On appelle $\delta : \mathbb{R}^{I} \rightarrow \mathbb{B}$ la fonction de \texttt{FSK}-d\'emodulation de $x$. Alors:
@@ -511,7 +512,7 @@ On propose un algorithme (\textsc{algorithme}~\ref{algo_numerisation_FSK}, \text
 %\end{eqnarray}
 %\end{definition}
 
-\subsection{D\'emodulation OOK (CW)}
+\subsection{OOK demodulation (CW)}
 
 La modulation en \textit{On-Off Keying} (OOK) est un cas particulier de la modulation en \texttt{ASK} (Amplitude Shift-Keying). Les donn\'ees num\'eriques sont modul\'ees par la pr\'esence ou bien l'abscence du signal porteur $F_c$. On note $A(F_c)$ l'amplitude associ\'ee \`a la composante fr\'equentielle $F_c$. De mani\`ere analogue, en consi\'erant que les op\'rations de d\'emodulation sont effectu\'ees par le \texttt{VR5000}, on propose un algorithme (\textsc{algorithme}~\ref{algo_numerisation_OOK}) similaire de num\'erisation de donn\'ees modul\'ees en \texttt{OOK}.
 
@@ -528,23 +529,23 @@ La modulation en \textit{On-Off Keying} (OOK) est un cas particulier de la modul
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{D\'ecodage de trames AX.25 et automates finis}
+\subsection{AX.25 packets decoding}
 
 \begin{definition}
   { \color{rltred}{\Radioactivity} }
   \textsc{(lsb$-$msb)}
-  Soit $x$ un nombre binaire. Il existe alors une suite finie $\left ( b_n \right )_{0 \leq n \leq n_0}$ d'entiers \'egaux \`a $0$ ou $1$ tel que
+  Let $x$ be a number in binary representation. There exists a finite sequence $\left ( b_n \right )_{0 \leq n \leq n_0}$ of whole numbers that equals to $0$ or $1$ such that 
   \begin{eqnarray*}
     x = \sum^{n_0}_{n = 0}{b_n \times 2^n}
   \end{eqnarray*}
-  L'entier $b_0$ est appel\'e \textit{bit de poids faible} (\textsc{lsb}) et l'entier $b_{n_0}$ le \textit{bit de poids fort} (\textsc{msb}).
+  The whole number $b_0$ is called the \textit{least significant bit} (\textsc{lsb}) and the number $b_{n_0}$ the \textit{most significant bit} (\textsc{msb}).
 \end{definition}
 
 \begin{example}
-  On pose $x$ le nombre $42$ en repr\'esentation d\'ecimale, on note $(x)_{\textup{bin}}$ la repr\'sentation binaire de $x$ dans la notation positionelle habituelle, on a :
-\begin{eqnarray*}
-  (x)_{\textup{bin}} = \underbrace{1}_{\textup{MSB}}0101\underbrace{0}_{\textup{LSB}}
-\end{eqnarray*}
+  Let $x = 42$ in decimal representation, we denote $(x)_{\textup{bin}}$ the binary representation of $x$ in the usual positional notation. We have:
+  \begin{eqnarray*}
+    (x)_{\textup{bin}} = \underbrace{1}_{\textup{MSB}}0101\underbrace{0}_{\textup{LSB}}
+  \end{eqnarray*}
 
 \begin{comment}
 \begin{figure}[h]
