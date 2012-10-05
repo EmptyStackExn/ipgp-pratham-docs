@@ -476,7 +476,7 @@ On propose un algorithme (\textsc{algorithme}~\ref{algo_numerisation_FSK}, \text
 
 \begin{proposition}
   \textsc{(mean formula)}
-  Let $N \in \mathbb{N}$ and $x : \left \{ 0 ; \dots ; N - 1 \right \} \rightarrow \mathbb{R}$ a signal of $N$ samples. We denote the \textit{mean of the signal} $x$ with:
+  Let $N \in \mathbb{N}$ and $x : \left \{ 0 ; \dots ; N - 1 \right \} \rightarrow \mathbb{R}$ be a signal of $N$ samples. We denote $\operatorname{mean} (x)$ the \textit{mean of the signal} $x$ such that:
   \begin{eqnarray*}
     \mathbb{R}^{\left \{ 0 ; \dots ; N - 1 \right \}} &\rightarrow& \mathbb{R}\\
     \operatorname{mean} : x &\mapsto& \frac{1}{N}\sum^{N - 1}_{i = 0}{f(i)}
@@ -553,6 +553,7 @@ La modulation en \textit{On-Off Keying} (OOK) est un cas particulier de la modul
     (x)_{\textup{bin}} = \underbrace{1}_{\textup{MSB}}0101\underbrace{0}_{\textup{LSB}}
   \end{eqnarray*}
 
+%% comment!
 \begin{comment}
 \begin{figure}[h]
   \begin{tabular}{|c|}
@@ -892,26 +893,32 @@ On d\'efinit sur $\mathbb{M}$ la longueur d'une lettre $x \in \mathbb{M}$ comme 
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Pr\'ecision de l'acquisition}
-Le bo\^itier d'acquisition dispose d'un convertisseur analogique$-$num\'erique d'une r\'esolution de $16$ bits. La r\'esolution $Q$ du \textsc{can} ou \textit{tension du bit de poids faible} (\textsc{lsb}) est donn\'ee par la relation
+\subsection{Measurement accuracy}
+
+The ADC has a resolution of $16$ bits. We denote $Q$ as the \textsc{resolution} or \textsc{least significant bit voltage} (in volts). The maximum error that the instrument gives under the usual conditions are given by the ADC specifications (Section \textit{AI Absolute Accuracy Table}, p.5)~\cite{NI_6353_datasheet} and are confirmed by the following calculation for a \textsc{span} of $20 \operatorname{V}$:
 \begin{eqnarray*}
   Q &=& \frac{E_{\textup{FSR}}}{N}\\
-    &=& \frac{V_{\textup{RefHi}} - V_{\textup{RefLow}}}{2^M}
+    &=& \frac{V_{\textup{RefHi}} - V_{\textup{RefLow}}}{2^M - 1}\\
+    &=& \frac{10 - (-10)}{2^{16} - 1}\\
+    &\simeq& 0.0001520 \operatorname{V}
 \end{eqnarray*}
 
-o\`u :
+where :
 
 \begin{description}
-  \item[$E_{\textup{FSR}}$]{ : intervalle de tensions calibr\'es [V]}
-  \item[$N$]{ : nombre d'intervalles de tensions [1]}
-  \item[$V_{\textup{RefHi}}$]{ : calibre maximal de mesure de tension [V]}
-  \item[$V_{\textup{RefLow}}$]{ : calibre minimal de mesure de tension [V]}
-  \item[$M$]{ : r\'esolution du \textsc{can} [bit]}
+  \item[$E_{\textup{FSR}}$]{ : full scale voltage range (V)}
+  \item[$N$]{ : number of voltage intervals [1]}
+  \item[$V_{\textup{RefHi}}$]{ : upper extreme coding voltage (V)}
+  \item[$V_{\textup{RefLow}}$]{ : lower extreme coding voltage (V)}
+  \item[$M$]{ : ADC resolution (bits)}
 \end{description}
 
-La sp\'ecification du bo\^tier d'acquisition renseigne sur la pr\'ecision absolue~\cite{NI_6353_datasheet} en page ``AI Absolute Accuracy Table''.
+Considering that $V_{\textup{RefHi}} = 10 \operatorname{V}$, for all acquired voltage $U_a$, $U_a$ will be expressed in scientific notation as follows:
+\begin{eqnarray*}
+  U_a = \left ( d_1.d_2d_3d_4d_5d_6d_7d_8 \pm 0.0001520 \right ) \operatorname{V}
+\end{eqnarray*}
 
-On a alors d\'etermin\'e que nombre de chiffres significatifs de cet appareil de mesure s'\'el\`eve \`a 12 digits
+We then decide to keep $8$ digits for a voltage measured with this ADC. However, further calculations have to be based on the number of \textsc{significant digits} which is $6$. 
 
 \subsection{Enregistrement et sauvegarde des donn\'ees}
 
