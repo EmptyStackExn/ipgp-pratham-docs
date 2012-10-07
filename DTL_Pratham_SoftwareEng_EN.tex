@@ -324,7 +324,7 @@ We suggest the following algorithm (\textsc{algorithm}~\ref{algo_timer}, \textsc
 \subsection{Acquisition loop}
 
 \noindent
-\textbf{Method.} For the NI USB-6353 Acquisition Box, the recommended warm-up time is $15$ minutes\cite{NI_6353_datasheet}.
+\textbf{Repository.} A set of tools for acquisition matters are available in the \href{https://github.com/EmptyStackExn/ipgp-pratham-daq-collection}{\texttt{ipgp-pratham-daq-collection}} repository. Final sources are supposed to be compiled with NI Application Builder~\cite{NI_compiler}~\cite{NI_application_builder}.
 
 \begin{definition}
   (\textsc{acquisition window length})
@@ -446,9 +446,20 @@ We then have\cite{Senlis} :
         &=& \sqrt{\mathfrak{Re} \left ( \hat{x} \left (\frac{f.N}{F_e} \right ) \right )^2 + \mathfrak{Im} \left ( \hat{x} \left (\frac{f.N}{F_e} \right ) \right )^2}
 \end{eqnarray*}
 
-\subsection{FSK demodulation}
+\subsection{FM demodulation}
 
-We assume \textsc{fsk} demodulation to be made by the \textsc{vr5000} Transceiver. We only suggest a simple algorithm for signal digitizing.
+We assume \textsc{fsk} and \textsc{ook} demodulation to be made by the \textsc{vr5000} Transceiver. Retrieving bits of data refers to the \textsc{nrz} decoding section.
+
+\subsection{NRZ decoding}
+
+\noindent
+\textbf{Repository.} The \textsc{nrz} decoder is available in the \href{https://github.com/EmptyStackExn/nrz-decoder}{\texttt{nrz-decoder}} repository.
+
+\noindent
+\textbf{Specification.}
+  The digital baseband transmission method is of the kind non-return-to-zero (\textsc{nrz}). In other words, logical \texttt{1} matches with one significant condition and logical \texttt{0} with another.
+
+We assume we have a \textsc{fm} demodulated signal and that we will only focus on shaping issue.
 
 \begin{proposition}
   \textsc{(samples per window)}
@@ -460,20 +471,6 @@ We assume \textsc{fsk} demodulation to be made by the \textsc{vr5000} Transceive
   The calculation window length (expressed in number of samples) of the digitizer is $\frac{F_e}{F_b}$.
 \end{proposition}
 
-\noindent
-\textbf{Idea.}
-\textsc{(num\'erisation fsk)}
-  On cherche, \`a partir d'un signal compos\'e de deux amplitudes, \`a distinguer celle ayant l'occurence la plus r\'eguli\`ere. On peut alors calculer la moyenne du signal et v\'erifier si cette valeur ``se rapproche plus'' d'une amplitude ou d'une autre autre.
-
-On propose un algorithme (\textsc{algorithme}~\ref{algo_numerisation_FSK}, \textsc{impl\'ementation~\ref{fig:algo_numerisation_FSK_labview}}) qui ne d\'etecte qu'un seul bit d'information par signal $x$ re\c{c}u et qui, \`a partir de deux amplitudes $A(f_0)$ et $A(f_1)$, renvoie la num\'erisation de $x$ comme suit:
-  \begin{eqnarray*}
-    \texttt{numerisation\_FSK} (x) =\\
-    \left\{\begin{matrix}
-    \texttt{0} &\textup{si }& \left | \operatorname{moyenne}(x) - A(f_0) \right | > \left | \operatorname{moyenne}(x) - A(f_1) \right |\\ 
-    \texttt{1} &\textup{sinon}&
-    \end{matrix}\right.
-  \end{eqnarray*}
-
 \begin{proposition}
   \textsc{(mean formula)}
   Let $N \in \mathbb{N}$ and $x : \left \{ 0 ; \dots ; N - 1 \right \} \rightarrow \mathbb{R}$ be a signal of $N$ samples. We denote $\operatorname{mean} (x)$ the \textit{mean of the signal} $x$ such that:
@@ -483,9 +480,6 @@ On propose un algorithme (\textsc{algorithme}~\ref{algo_numerisation_FSK}, \text
   \end{eqnarray*}
 \end{proposition}
 
-\noindent
-\textbf{Specification.}
-  The digital baseband transmission method is of the kind non-return-to-zero (\textsc{nrz}). In other words, logical \texttt{1} matches with one significant condition and logical \texttt{0} with another.
 
 \begin{algorithm}[h]
 \caption{Num\'erisation FSK}
@@ -501,41 +495,9 @@ On propose un algorithme (\textsc{algorithme}~\ref{algo_numerisation_FSK}, \text
 \end{algorithmic}
 \end{algorithm}
 
-
-\begin{figure*}[]
-  \includegraphics[width=15cm]{pictures/numerisation_amplitude.png}
-\caption{Implementation of a signal digitizer in LabVIEW}
-\label{fig:algo_numerisation_FSK_labview}
-\end{figure*}
-
-%\begin{definition}
-%  Soient $x$ un signal de largeur de fen\^etre de calcul $\Delta t = \frac{1}{F_b}$ et $\mathbb{B} = \{\texttt{0}, \texttt{1}\}$ un alphabet. On appelle $\delta : \mathbb{R}^{I} \rightarrow \mathbb{B}$ la fonction de \texttt{FSK}-d\'emodulation de $x$. Alors:
-%\begin{eqnarray}
-%  \delta (x) = \left\{\begin{matrix}
-%&\texttt{0}& \textup{si} \ A (F_c - \frac{\Delta f}{2}) > A (F_c + \frac{\Delta f}{2})\\ 
-%&\texttt{1}& \textup{sinon}
-%\end{matrix}\right.
-%\end{eqnarray}
-%\end{definition}
-
-\subsection{OOK demodulation (CW)}
-
-La modulation en \textit{On-Off Keying} (OOK) est un cas particulier de la modulation en \texttt{ASK} (Amplitude Shift-Keying). Les donn\'ees num\'eriques sont modul\'ees par la pr\'esence ou bien l'abscence du signal porteur $F_c$. On note $A(F_c)$ l'amplitude associ\'ee \`a la composante fr\'equentielle $F_c$. De mani\`ere analogue, en consi\'erant que les op\'rations de d\'emodulation sont effectu\'ees par le \texttt{VR5000}, on propose un algorithme (\textsc{algorithme}~\ref{algo_numerisation_OOK}) similaire de num\'erisation de donn\'ees modul\'ees en \texttt{OOK}.
-
-\begin{algorithm}[h]
-\caption{Num\'erisation OOK}
-\label{algo_numerisation_OOK}
-\begin{algorithmic}[1]
-  \REQUIRE signal $x$ \`a $N$ valeurs, amplitude de $F_c$ : $A(F_c)$
-  \IF {$\frac{1}{N}\sum^{N}_{i = 0}{x(i)} < \frac{A(F_c)}{2}$}
-  \RETURN \texttt{0}
-  \ELSE
-  \RETURN \texttt{1}
-  \ENDIF
-\end{algorithmic}
-\end{algorithm}
-
 \subsection{AX.25 packets decoding}
+
+\textbf{Repository.} ???
 
 \begin{definition}
   { \color{rltred}{\Radioactivity} }
@@ -576,22 +538,22 @@ La modulation en \textit{On-Off Keying} (OOK) est un cas particulier de la modul
 
 \begin{remark}
   (\textsc{boutisme de bits})
-  Tous les octets (mots de longeur 8) d'une trame AX.25 (except\'e pour le facteur FCS) sont re\c{c}us avec le \textit{bit de poids faible} en premier\cite{IITB}. Le facteur FCS d'une telle trame est la concat\'enation d'octets de poids forts en premier.
+  Every bytes (words on bits of length $8$) of a \textsc{ax.25} packet (except for the FCS unit) are received with the \textsc{least significant bit} first\cite{IITB}.
 \end{remark}
 
-On note l'alphabet $\mathbb{B} = \{\texttt{0}, \texttt{1}\}$.
+On note l'alphabet $\mathbb{B} = \{\texttt{0} ; \texttt{1}\}$.
 
 \begin{definition}
-  \textsc{(trame ax.25 de pratham)}
-  Un mot $m$ sur l'alphabet $\mathbb{B}$ est une \textit{trame AX.25 de Pratham}~\cite{IITB}~\cite{ax25} s'il est la concat\'enation des facteurs suivants (\`a un facteur \textit{fanion} pr\`es):
+  \textsc{(ax.25 packet of pratham)}
+  A word $m$ on $\mathbb{B}^{\star}$ is an \textsc{ax.25 packet of pratham}~\cite{IITB}~\cite{ax25} if there exists the following words (or \textsc{units}) of which it the concatenation (\`a un facteur \textit{fanion} pr\`es):
   \begin{footnotesize}
     \begin{tabular}{|c|c|c|c|c|c|c|}
       \hline
-      \multicolumn{7}{|c|}{$m$ : 114 octets}\\
+      \multicolumn{7}{|c|}{$m$ : 114 bytes}\\
       \hline
-      Fanion & Adresse & Contr\^ole & PID & {\tiny Information} & FCS & Fanion\\
+      Flag & Address & Control & PID & {\tiny Information} & FCS & Fanion\\
       \hline
-      $\texttt{01111110}$ & $\dots$ & $\texttt{00000011}$ & $\texttt{11110000}$ & $\dots$ & $2$ octets & $\texttt{01111110}$\\
+      $\texttt{01111110}$ & $\dots$ & $\texttt{00000011}$ & $\texttt{11110000}$ & $\dots$ & $2$ bytes & $\texttt{01111110}$\\
       \hline
     \end{tabular}
   \end{footnotesize}
@@ -599,11 +561,11 @@ On note l'alphabet $\mathbb{B} = \{\texttt{0}, \texttt{1}\}$.
   \begin{footnotesize}
     \begin{tabular}{|c|c|c|c|c|c|c|c|}
       \hline
-      \multicolumn{8}{|c|}{Adresse : 21 octets}\\
+      \multicolumn{8}{|c|}{Address : 21 octets}\\
       \hline
-      \multicolumn{3}{|c|}{Sous-adresse$_1$} & \multicolumn{2}{c|}{Sous-adresse$_2$} & \multicolumn{3}{c|}{Sous-adresse$_3$}\\
+      \multicolumn{3}{|c|}{Subaddress$_1$} & \multicolumn{2}{c|}{Subaddress$_2$} & \multicolumn{3}{c|}{Subaddress$_3$}\\
       \hline
-      \multicolumn{3}{|c|}{7 octets} & \multicolumn{2}{c|}{7 octets} & \multicolumn{3}{c|}{7 octets}\\
+      \multicolumn{3}{|c|}{7 bytes} & \multicolumn{2}{c|}{7 bytes} & \multicolumn{3}{c|}{7 bytes}\\
       \hline
       \texttt{CQ} & $\left ( (20)_{\operatorname{hex}} \right )^4$ & \texttt{01100000} & \texttt{VU2DMQ} & \texttt{01100000} & \texttt{RELAY} & $(20)_{\operatorname{hex}}$ & \texttt{01100000}\\
       \hline
@@ -615,7 +577,7 @@ On note l'alphabet $\mathbb{B} = \{\texttt{0}, \texttt{1}\}$.
   \begin{footnotesize}
     \begin{tabular}{|c|}
       \hline
-      Information : 87 octets\\
+      Information : 87 bytes\\
       \hline
       \textit{Health monitoring data}\cite{IITB}\\
       \hline
@@ -624,6 +586,8 @@ On note l'alphabet $\mathbb{B} = \{\texttt{0}, \texttt{1}\}$.
 \end{center}
 
 \end{definition}
+
+The information unit description is defined in \cite{IITB}.
 
 \begin{theorem}
   { \color{rltred}{\Radioactivity} }
@@ -756,91 +720,60 @@ fcs         ::= (* attention au boutisme *)
 \end{algorithm}
 
 
-\subsection{D\'ecodage du Morse}
+\subsection{Morse decoding}
 
-\textbf{Liaison.} Simplex (d\'efinition \textsc{ansi})
+\textbf{Repository.} The Morse decoder is available in the \href{https://github.com/EmptyStackExn/morse-decoder}{\texttt{morse-decoder}} repository.
+
+\textbf{Link.} Simplex (\textsc{ansi} definition)
 
 \vspace{0.3cm}
 
-\textbf{Sp\'ecification.}
-La sp\'ecification du code Morse en vigueur dans le cadre du projet est celle d\'ecrite par l'International Telecommunication Union~\cite{ITU_morse}. On en rappelle ci-dessous la description :
+\textbf{Specification.}
+The Morse code specification for the satellite beacon signal is the same as provided by the International Telecommunication Union~\cite{ITU_morse}. We give a short description:
 
 \begin{enumerate}
-  \item{La lettre \textsc{dah} ($-$) dure trois fois plus longtemps que la lettre \textsc{dit} ($\cdot$) ;}
+  \item{The \textsc{dah} letter ($-$) lasts three times longer than the \textsc{dit} letter ($\cdot$) ;}
   \item{L'\'ecart entre deux \'el\'ements (\textsc{dit} ou \textsc{dah}) d'une m\^eme lettre dure un \textsc{dit} ;}
   \item{L'\'ecart entre deux lettres d'alphabet dure un \textsc{dah} ;}
   \item{L'\'ecart entre deux mots dure sept \textsc{dit}.}
 \end{enumerate}
 
 \begin{definition}
-  On note $\mathbb{M}$ l'alphabet Morse. On a :
+  We denote $\mathbb{B}$ the set of bits, $\mathbb{M}$ the Morse alphabet and $\mathbb{N}_{255}$ the ASCII representable characters as follows:
   \begin{eqnarray*}
-    \mathbb{M} = \left \{ \varepsilon_1, \varepsilon_3, \varepsilon_7, ., - \right \}
+    \mathbb{B}      &=& \left \{ \texttt{0} ; \texttt{1} \right \}\\
+    \mathbb{M}      &=& \left \{ \varepsilon_1, \varepsilon_3, \varepsilon_7, ., - \right \}\\
+    \mathbb{N}_{255} &=& \left \{ \dots ; \textup{a} ; \textup{b} ; \dots \right \}
   \end{eqnarray*}
 \end{definition}
 
 \begin{definition}
-  On d\'efinit par cas sur $\mathbb{M}$ l'application :
+  We define on $\mathbb{M}$ the coding function for one token (??? inexact):
   \begin{eqnarray*}
-    h : \mathbb{M} &\rightarrow& \mathbb{B^{*}}\\
+    \operatorname{morse\_code} : \mathbb{M} &\rightarrow& \mathbb{B^{*}}\\
                  m &\mapsto&
                  \left\{\begin{matrix}
-                        \texttt{0} \ &\textup{si}& \ m &=& \varepsilon_1 \\ 
-                        \texttt{000} \ &\textup{si}& \ m &=& \varepsilon_3 \\
-                        \texttt{0000000} \ &\textup{si}& \ m &=& \varepsilon_7 \\
-                        \texttt{1} \ &\textup{si}& m &=& \cdot\\
-                        \texttt{111} \ &\textup{si}& m &=& -
+                        \texttt{0} \ &\textup{if}& \ m &=& \varepsilon_1 \\ 
+                        \texttt{000} \ &\textup{if}& \ m &=& \varepsilon_3 \\
+                        \texttt{0000000} \ &\textup{if}& \ m &=& \varepsilon_7 \\
+                        \texttt{1} \ &\textup{if}& m &=& \cdot\\
+                        \texttt{111} \ &\textup{if}& m &=& -
                         \end{matrix}\right.
   \end{eqnarray*}
 \end{definition}
 
 \begin{definition}
-On d\'efinit sur $\mathbb{M}$ la longueur d'une lettre $x \in \mathbb{M}$ comme \'etant l'application :
+  We define on $\mathbb{M}$ the length of a letter $x \in \mathbb{M}$ as:
 \begin{eqnarray*}
   L : \mathbb{M} &\rightarrow& \mathbb{N}\\
               x  &\mapsto&
                  \left\{\begin{matrix}
-                 1 \ &\textup{si }& x &\in& \left \{ \texttt{.}, \varepsilon_1 \right \} \\
-                 3 \ &\textup{si }& x &\in& \left \{ -, \varepsilon_3 \right \} \\ 
-                 7 \ &\textup{si }& x &=& \varepsilon_7
+                 1 \ &\textup{if }& x &\in& \left \{ \texttt{.}, \varepsilon_1 \right \} \\
+                 3 \ &\textup{if }& x &\in& \left \{ -, \varepsilon_3 \right \} \\ 
+                 7 \ &\textup{if }& x &=& \varepsilon_7
               \end{matrix}\right.
 \end{eqnarray*}
 \end{definition}
-
-\begin{proposition}
-  {(\textsc{norme sur $\mathbb{M}^{\star}$})}
-  Soit la fermeture de Kleene~\cite{kleene_star} de l'alphabet $\mathbb{M}$, not\'ee $\mathbb{M}^{\star}$. L'application
-  \begin{eqnarray*}
-    \widetilde{N} : \mathbb{M}^{\star} &\rightarrow& \mathbb{N}\\
-    x = (x_0 \dots x_{n - 1}) &\mapsto& \sum_{i = 0}^{n - 1}{N(x_i)}
-  \end{eqnarray*}
-  est une norme sur $\mathbb{M}^{\star}$.
-\end{proposition}
-
-%utiliser mathcal
-\begin{proof}
-  Soit un mot $x \in \mathbb{M}^{\star}$. Il existe une suite de lettres de $\mathbb{M}$ $(x_1 \dots x_n)$ telle que 
-  \begin{eqnarray*}
-    x = (x_1 \dots x_n)
-  \end{eqnarray*}
-  \begin{enumerate}
-    \item{(\textsc{s\'eparation})
-      \begin{eqnarray*}
-        \forall x \in \mathbb{M}^{\star}, \widetilde{N}(x) = 0 \Rightarrow x = \varepsilon
-      \end{eqnarray*}
-    }
-    \item{(\textsc{homog\'en\'eit\'e})
-      \begin{eqnarray*}
-        \forall (\lambda, x) \in \mathbb{N} \times \mathbb{M}^{\star}, \widetilde{N}(x^{\lambda}) = \lambda \widetilde{N}(x)
-      \end{eqnarray*}
-    }
-    \item{(\textsc{in\'egalit\'e triangulaire})
-      \begin{eqnarray*}
-        \forall (x, x') \in \mathbb{M}^{\star}, \widetilde{N}(x.x') \leq \widetilde{N}(x) + \widetilde{N}(x')
-      \end{eqnarray*}
-    }
-  \end{enumerate}
-\end{proof}
 
 \begin{figure*}[]
   \begin{eqnarray*}
@@ -848,50 +781,24 @@ On d\'efinit sur $\mathbb{M}$ la longueur d'une lettre $x \in \mathbb{M}$ comme 
     \underbrace{\texttt{1111111}}_{\varepsilon_7}
     \underbrace{\underbrace{\underbrace{\texttt{111}}_{-} \underbrace{\texttt{0}}_{\varepsilon_1} \underbrace{\texttt{1}}_{.} \underbrace{\texttt{0}}_{\varepsilon_1} \underbrace{\texttt{1}}_{.} \underbrace{\texttt{0}}_{\varepsilon_1} \underbrace{\texttt{1}}_{.}}_{B} \underbrace{\texttt{000}}_{\varepsilon_3} \underbrace{\underbrace{\texttt{111}}_{-} \underbrace{\texttt{0}}_{\varepsilon_1} \underbrace{\texttt{111}}_{-} \underbrace{\texttt{0}}_{\varepsilon_1} \underbrace{\texttt{111}}_{-}}_{O} \underbrace{\texttt{000}}_{\varepsilon_3} \underbrace{\underbrace{\texttt{111}}_{-} \underbrace{\texttt{0}}_{\varepsilon_1} \underbrace{\texttt{111}}_{-}}_{M}}_{BOM}
   \end{eqnarray*}  
-  \caption{Exemple des couches d'abstraction d'un signal Morse codant l'information \texttt{``IIT Bombay''}}
+  \caption{Example of token generation steps for the Morse coded beacon signal : ``\texttt{IIT Bombay}''}
   \label{fig:exemple_signal_morse}
 \end{figure*}
 
 
 \begin{figure}[h]
   \includegraphics[width=6cm]{pictures/morse.png}
-\caption{Alphabet du code Morse}
+\caption{Morse code alphabet}
 \label{fig:morse}
 \end{figure}
 
-\textbf{Impl\'ementation.} On impl\'emente tout d'abord un transducteur fini qui sur l'alphabet $\mathbb{B} = {\cdot, -}$ reconnait un mot sur $\mathbb{B}$ et retourne la lettre associee a son codage en Morse. Le transducteur est donn\'e en \textsc{figure} ~\ref{fig:transducteur_morse}.
+\textbf{Implementation.} We implement a transducer with two entrypoints (or two transducers with one unique entrypoint) with a lexical analyzer generator from the alphabet $\mathbb{B}^{\star} = \{ \texttt{0} ; \texttt{1} \}^{\star}$ to $\mathbb{M}^{\star}$. The second transducer processes from $\mathbb{M}^{\star}$ to $\mathbb{N}_{255}^{\star}$ (\textsc{figure} ~\ref{fig:transducteur_morse}).
 
 \begin{figure*}
   \includegraphics[width=17cm]{pictures/Morse_code_tree3.png}
 \caption{Transducteur fini associ\'e au d\'ecodage \textsc{morse}~\cite{copyright_transducteur_morse}}
 \label{fig:transducteur_morse}
 \end{figure*}
-
-\textbf{Impl\'ementation.} On termine l'implementation avec une analyse lexicale sur les bits issus de la num\'erisation du signal \`a $145,980$ MHz (\textsc{algorithme~\ref{lexing_signal_morse}}).
-
-\begin{algorithm}[h]
-\caption{D\'ecodage Morse \`a partir du signal modulant (num\'erique)}
-\label{lexing_signal_morse}
-\begin{algorithmic}[1]
-  \REQUIRE mot $m = m_0 \dots m_{p  - 1}$ sur l'alphabet $\mathbb{B}$ de longueur $p$, transducteur $T_{\textup{Morse}}$ muni de \texttt{eval()}
-  \STATE cha\^ine de caractr\`eres $acc$, et $res$ 
-  \STATE \textbf{analyse lexicale} de $m$ \textbf{faire}
-  \STATE \textbf{parse} \texttt{0000000} : \hfill \textit{(* $\varepsilon_7$ *)}
-  \STATE $res \leftarrow res.$\texttt{`` ''}
-  \STATE $acc \leftarrow \varepsilon$
-  \STATE \textbf{parse} \texttt{000} : \hfill \textit{(* $\varepsilon_3$ *)}
-  \STATE $res \rightarrow res .$ \texttt{eval}$(T_{\textup{Morse}}, acc)$
-  \STATE $acc \leftarrow \varepsilon$
-  \STATE \textbf{parse} \texttt{0} : \hfill \textit{(* $\varepsilon_1$ *)}
-  \STATE $acc \leftarrow \varepsilon$
-  \STATE \textbf{parse} \texttt{111} : \hfill \textit{(* $-$ *)}
-  \STATE $acc \leftarrow acc . -$
-  \STATE \textbf{parse} \texttt{1} : \hfill \textit{(* $\cdot$ *)}
-  \STATE $acc \leftarrow acc . \cdot$
-  \STATE \textbf{fin analyse lexicale}
-  \RETURN $res$
-\end{algorithmic}
-\end{algorithm}
 
 \subsection{Measurement accuracy}
 
@@ -920,37 +827,70 @@ Considering that $V_{\textup{RefHi}} = 10 \operatorname{V}$, for all acquired vo
 
 We then decide to keep $8$ digits for a voltage measured with this ADC. However, further calculations have to be based on the number of \textsc{significant digits} which is $6$. 
 
-\subsection{Enregistrement et sauvegarde des donn\'ees}
+\subsection{Data logging}
 
-On r\'ealise une estimation des co\^uts en espace que peuvent engendrer l'enregistrement des valeurs de mesures au format de fichier Pratham en convention avec l'IITB\cite{IITB_filespec}. La dur\'ee d'acquisition lors d'un passage de satellite au$-$dessus de Paris d\'epend de plusieurs param\`etres, tels que :
+We remind that data logging rules are specified in \textit{Pratham satellite : File format specification document}\cite{IITB_filespec}. Duration of satellite AOS depends on the following parameters:
+
 \begin{itemize}
-\item{l'altitude du satellite ;}
-\item{le syst\`eme de tracking (\textsc{Nova}) :}
-\item{l'ouverture de l'antenne ;}
-\item{le multitrajet \`a basse \'el\'evation.}
+\item{the satellite altitude ;}
+\item{the Earth orbit model used in the tracking softwware ;}
+\item{the antenna aperture (???) ;}
+\item{the low elevation multi-targeting (???)}
 \end{itemize}
 
-On se propose d'effecuter une premi\`ere estimation sur les fichiers de donn\'ees brutes par intervalles de donn\'ees en portant \`a consid\'eration que 12 digits suffiront \`a la repr\'esentation des nombres \`a virgule flottante.
+We give a preliminary estimation of total logging file sizes considering that a measure may be represented in decimal ASCII character representation with 6 digits.
 
 \begin{proposition}
-  (\textsc{complexit\'e en espace d'un flottant})
-  En consid\'erant que la repr\'esentation d'un nombre \`a virgule flottante en \textsc{ascii} s'effectue sur $12$ caract\`eres et qu'un caract\`ere en encodage \textsc{ascii} a un co\^ut en espace d'un octet. Alors un nombre \`a virgule flottante a un co\^ut en espace de $12$ octets.
+  (\textsc{space complexity of a floating-point number})
+  Assuming that a floating-point number will be represented on $6$ digits and that an encoding character costs $1$ byte. A floating-point number then costs $7$ bytes.
 \end{proposition}
 
 \begin{remark}
-  La repr\'esentation en machine 32$-$bits\cite{Alexandridis} suivant les conventions \textsc{ansi$-$c} d'un nombre sign\'e \`a virgule flottante en pr\'ecision simple ne co\^ute que 4 octets\cite{Marshall}, soit trois fois moins que la repr\'esentation pr\'ec\'edente.
+  A floating-point number represented in IEEE ??? on $32$ bits only costs $4$ bytes $-$ that is to say threes times cheaper that the previous representation $-$
 \end{remark}
 
 \begin{proposition}
-  (\textsc{complexit\'e en espace des enregistrements de donn\'ees})
-  Soit $(\mathbb{B}^{\star}, l_{\cdot})$ un espace norm\'e. On a alors l'approximation suivante de la longueur d'un enregistrement d'une s\'equence d'acquisition :
+  (\textsc{space complexity of Data 0- Calibration info, station characteristics})
+  Let $(\mathbb{B}^{\star}, l_{\cdot})$ be a normed space (???). We then have the following approximation for one acquisition sequence:
+\end{proposition}
+
+\begin{proposition}
+  (\textsc{space complexity of Data 1- Raw output from ground station acquisition})
+  Let $(\mathbb{B}^{\star}, l_{\cdot})$ be a normed space (???). We then have the following approximation for one acquisition sequence:
+\end{proposition}
+
+\begin{proposition}
+  (\textsc{space complexity of Data 2- Orientation of the reference})
+  Let $(\mathbb{B}^{\star}, l_{\cdot})$ be a normed space (???). We then have the following approximation for one acquisition sequence:
+\end{proposition}
+
+\begin{proposition}
+  (\textsc{space complexity of Data 3- Auxiliary data})
+  Let $(\mathbb{B}^{\star}, l_{\cdot})$ be a normed space (???). We then have the following approximation for one acquisition sequence:
+\end{proposition}
+
+\begin{proposition}
+  (\textsc{space complexity of Data 4- Processed data})
+  Let $(\mathbb{B}^{\star}, l_{\cdot})$ be a normed space (???). We then have the following approximation for one acquisition sequence:
+\end{proposition}
+
+\begin{proposition}
+  (\textsc{space complexity of Data 4- Processed data})
+  Let $(\mathbb{B}^{\star}, l_{\cdot})$ be a normed space (???). We then have the following approximation for one acquisition sequence:
+\end{proposition}
+
+\begin{proposition}
+  (\textsc{space complexity of Data 5- Processed data for Prathart})
+  Let $(\mathbb{B}^{\star}, l_{\cdot})$ be a normed space (???). We then have the following approximation for one acquisition sequence:
+\end{proposition}
+
+
   \begin{eqnarray}
     l_{\textup{fichier}} &=& \underbrace{\Delta t}_{\in \left [ 7 ; 13 \right ] \ \operatorname{min}} \times \underbrace{f_e}_{10 \ \operatorname{kHz}} \nonumber\\
                     &\times& \underbrace{\left (\underbrace{l_{\textup{date}}}_{23 \ \operatorname{octets}} + \underbrace{n_{\textup{voies}}}_{12} \times (\underbrace{l_{\textup{flottant}}}_{12 \ \operatorname{octets}} + \underbrace{l_{\textup{separateur}}}_{1 \ \operatorname{octet}} ) \right )}_{\textup{une ligne}}\\
                     &\in& \left [ 7,518 \times 10^8 ; 1,3962 \times 10^9 \right ] \\
                     &\ &  \textup{car } \Delta t \mapsto l_{\textup{fichier}} (\Delta t) \ \textup{croissante} \nonumber
   \end{eqnarray}
-\end{proposition}
 
 En se basant sur une estimation du nombre de passages du satellite au dessus de Paris\cite{IPGP_simul_loic} :
 \begin{eqnarray}
@@ -1000,7 +940,7 @@ On pr\'esente en \textsc{table}~\ref{tab:estimations_stockage}, les estimations 
 
 En consid\'erant que la fr\'equence d'\'echantillonage $F_e$ est de $10$ kHz, on obtient un instant de mesure
 \begin{eqnarray*}
-  T_e \stackrel{\mathrm{def}}{=} \frac{1}{F_e}
+  T_e \stackrel{\Delta}{=} \frac{1}{F_e}
 \end{eqnarray*}
 
 Par passage de satellite, on n'obtient que 7200000 valeurs pour les slanTEC (calcul \`a justifier).
@@ -1010,9 +950,10 @@ Dans le cadre d'une solution provisoire, on se permet d'utiliser le format de fi
 \subsection{Tol\'erance aux fautes}
 Le syst\`eme de tol\'erance aux fautes se limite qu'\`a une gestion des exceptions par LabVIEW qui lors d'une exception poursuit l'acquisition et effectue un rapport.
 
-\subsection{Logiciel final}
+\subsection{Ground station software environment}
 
-Le logiciel final sera compil\'e avec \texttt{NI Application Builder}~\cite{NI_compiler}~\cite{NI_application_builder}.
+\noindent
+\textbf{Repository.} You can find the final software en environment in the \href{https://github.com/EmptyStackExn/ipgp-pratham-gs-essential}{\texttt{ipgp-pratham-gs-essential}} repository.
 
 \section{Formats de fichier}
 \label{sec:file_formats}
@@ -1351,8 +1292,6 @@ Elle sera constemment connect\'ee sur le r\'eseau afin de permettre \`a l'\'equi
 \bibitem{Alexandridis}``{\it A microprocessor with a ``wordlength equal to $n$'' is also referred to as an $n$-bit microprocessor defined as a processor with $n$-bit wide internal data registers and $n$-bit wide ALU (arithmetic logic unit) which carries out operations on $n$-bit input operands.''}, N. Alexandridis in {\it \href{http://www.student.seas.gwu.edu/~kallitec/ece201/TextbookFigures/000-Chapter1.pdf}{Computer Systems Architecture: Microprocessor-Based Designs}} (The George Washigton University, May 1999)
 
 \bibitem{Sannibale}Virg\'inio de Oliveira Sannibale, {\it \href{http://www.ligo.caltech.edu/~vsanni/ph3/SignificantFiguresAndMeasurements/SignificantFiguresAndMeasurements.pdf}{Measurements and Significant Figures}} (California Institute of Technology, October 2011)
-
-\bibitem{Marshall}D. Marshall, {\it \href{http://www.cs.cf.ac.uk/Dave/C/node4.html}{C Basics}} (Cardiff University, May 1999)
 
 \bibitem{Nyquist}H. Nyquist, {\it \href{http://replay.web.archive.org/20060706192816/http://www.loe.ee.upatras.gr/Comes/Notes/Nyquist.pdf}{Certain topics in telegraph transmission theory}}, Trans. AIEE, vol. 47, pp. 617–644, Apr. 1928. Reprint as classic paper in: Proc. IEEE, Vol. 90, No. 2, Feb 2002.
 
