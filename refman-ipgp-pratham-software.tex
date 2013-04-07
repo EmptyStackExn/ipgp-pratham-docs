@@ -12,7 +12,8 @@
 %\documentclass[preprint,pre,floats,aps,amsmath,amssymb]{revtex4}
 
 % Use the following line for journal mode (single spaced, double column)
-\documentclass[twocolumn,pre,floats,aps,amsmath,amssymb]{revtex4}
+\documentclass[a4paper]{report}
+%\documentclass[twocolumn,pre,floats,aps,amsmath,amssymb]{revtex4}
 \usepackage{graphicx}
 \usepackage{bm}
 \usepackage{color}
@@ -27,53 +28,31 @@
 \usepackage{rotating}
 %\usepackage[final]{pdfpages}
 \usepackage{tikz}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
 \usetikzlibrary{automata,positioning}
 
-%%% francisation des algorithmes
-%\renewcommand{\algorithmicrequire} {\textbf{\textsc{Entr\'ees:}}}
-%\renewcommand{\algorithmicensure}  {\textbf{\textsc{Sorties:}}}
-%\renewcommand{\algorithmicwhile}   {\textbf{tantque}}
-%\renewcommand{\algorithmicdo}      {\textbf{faire}}
-%\renewcommand{\algorithmicendwhile}{\textbf{fin tantque}}
-%\renewcommand{\algorithmicend}     {\textbf{fin}}
-%\renewcommand{\algorithmicif}      {\textbf{si}}
-%\renewcommand{\algorithmicendif}   {\textbf{finsi}}
-%\renewcommand{\algorithmicelse}    {\textbf{sinon}}
-%\renewcommand{\algorithmicthen}    {\textbf{alors}}
-%\renewcommand{\algorithmicfor}     {\textbf{pour}}
-%\renewcommand{\algorithmicforall}  {\textbf{pour tout}}
-%\renewcommand{\algorithmicdo}      {\textbf{faire}}
-%\renewcommand{\algorithmicendfor}  {\textbf{fin pour}}
-%\renewcommand{\algorithmicloop}    {\textbf{boucler}}
-%\renewcommand{\algorithmicendloop} {\textbf{fin boucle}}
-%\renewcommand{\algorithmicrepeat}  {\textbf{r\'ep\'eter}}
-%\renewcommand{\algorithmicuntil}   {\textbf{jusqu'\`a}}
-%\renewcommand{\algorithmicreturn}   {\textbf{retourner}}
-
-%\floatname{algorithm}{Algorithme}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newtheorem{theorem}{Th\'eor\`eme.}[section]
-\newtheorem{lemma}[theorem]{Lemme.}
-\newtheorem{proposition}[theorem]{Proposition.}
-\newtheorem{corollary}[theorem]{Corollaire.}
+\newtheorem{theorem}{Theorem.}[section]
+\newtheorem{lemma}[theorem]{Lemma.}
+\newtheorem{proposition}[theorem]{Lemma.}
+\newtheorem{corollary}[theorem]{Corollary.}
 %\newtheorem{algorithm}[theorem]{Algorithme.}
 
 \newenvironment{implementation}[1][Impl\'ementation.]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
 
-\newenvironment{proof}[1][D\'emonstration.]{\begin{trivlist}
+\newenvironment{proof}[1][Proof.]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
 
 \newenvironment{notation}[1][Notation.]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
 
 
-\newenvironment{definition}[1][D\'efinition.]{\begin{trivlist}
+\newenvironment{definition}[1][Definition.]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
-\newenvironment{example}[1][Exemple.]{\begin{trivlist}
+\newenvironment{example}[1][Example.]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
-\newenvironment{remark}[1][Remarque.]{\begin{trivlist}
+\newenvironment{remark}[1][Remark.]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -85,24 +64,44 @@
 \begin{document}
 
 \title{The French Pratham ground station software system}
-\author{\'Equipe Pratham}
-\affiliation{Universit\'e Paris Diderot $-$ Institut de Physique du Globe de Paris, 4 avenue de Neptune, 94100 Saint-Maur-des-Foss\'es, France}
-\date{\today}
 
-\begin{abstract}
-  The copyright to this document and its source code are held by Institut de Physique du Globe de Paris. All rights reserved. This file is distributed under the license CeCILL Free Software License Agreement~\cite{cecill}.
-\end{abstract}
+\author{\'Equipe Pratham, Universit\'e Paris Diderot, Institut de Physique du Globe de Paris}
+%\affiliation{Universit\'e Paris Diderot $-$ Institut de Physique du Globe de Paris, 4 avenue de Neptune, 94100 Saint-Maur-des-Foss\'es, France}
+\date{\today}
 
 \maketitle
 
-\section{Introduction}
-\label{sec:intro}
+\tableofcontents
 
-The following application note introduces technical issues related to the control-data-acquistion software system of the ground station at IPGP for Pratham satellite~\cite{IITB_general}. It aims to give scientific answers to the choice of implemented structures, including: antenna rotor control, time-based acquisition scheduler, \textsc{fsk} (\textsc{frequency-shift keying}) and \textsc{ook} (\textsc{on-off keying}) demodulation, \textsc{ax.25} frame decoding, \textsc{morse} code decoding and data recording.
+
+
+
+\chapter{Foreword}
+\label{sec:foreword}
+
+The following reference manual introduces technical issues related to the control-data-acquistion software system of the ground station at IPGP for Pratham satellite~\cite{IITB_general}. It aims to give scientific answers to the choice of implemented structures, including: antenna rotor control, time-based acquisition scheduler, \textsc{fsk} (\textsc{frequency-shift keying}) and \textsc{ook} (\textsc{on-off keying}) demodulation, \textsc{ax.25} frame decoding, \textsc{morse} code decoding and data recording.
 
 \textbf{Warning.} Section marks { \color{rltred}{\Radioactivity} } give scientific arguments but not necessarily relevant information for the understanding of this document. Some algorithm implementation details have been omitted for more abstraction towards specific programming languages.
 
-\subsection{General overview}
+\section{Licensing}
+
+The set of softwares provided as follows is copyright (c) 2010-2013 Institut de Physique du Globe de Paris (IPGP). IPGP holds all ownership rights to the software system.
+The software system is open source and can be freely redistributed. See the file \verb!LICENSE! in the distribution for licensing information.
+The present documentation is copyright (c) 2010-2013 Institut de Physique du Globe de Paris (IPGP). This reference manual may be reproduced and distributed in whole or in part, subject to the following conditions:
+\begin{itemize}
+\item The copyright notice above and this permission notice must be preserved complete on all complete or partial copies.
+\item Any translation or derivative work of this reference manual must be approved by the authors in writing before distribution.
+\item If you distribute this reference manual in part, instructions for obtaining the complete version of this manual must be included, and a means for obtaining a complete version provided.
+\item Small portions may be reproduced as illustrations for reviews or quotes in other works without this permission notice if proper citation is given.
+\end{itemize}
+
+\section{Availability}
+
+The complete set of softwares can be accessed via the Web site \verb!https://github.com/EmptyStackExn!.
+
+\chapter{Introduction}
+\label{sec:intro}
+\section{Overview}
 
 The \texttt{NI-6353}~\cite{NI_6353_datasheet}~\cite{NI_calibration_procedure} Acquisition Box (considered as an ADC) acquires twelve voltage measurements in volt (V).
 
@@ -137,24 +136,30 @@ The \texttt{NI-6353}~\cite{NI_6353_datasheet}~\cite{NI_calibration_procedure} Ac
   We introduce on \textsc{table}~\ref{tab:diagramme_gen} a flowchart of acquisition channels at the input of ADC. { \color{oneblue}{Blue} } arrows ($\rightarrow$) match with channels from which the ADC acquire voltage measurements (in Volts). In the same way, { \color{rltgreen}{green} } (resp. { \color{rltred}{red} }) arrows match with as well voltage measurements acquisition as \textsc{ook} demodulation and \textsc{Morse} decoding (resp. \textsc{fsk} demodulation and \textsc{ax.25} frame decoding).
 \end{remark}
 
-\subsection{Digital signal at 437,455 MHz : Health monitoring data}
+\section{Digital signal at 437,455 MHz : Health monitoring data}
 
 The following process is applied to the two channels specified by { \color{rltred}{red} } arrows of the previous flowchart. At the end of the process we then have two output files for the same information $-$ as a matter of fact $-$ more accuracy.
 
 \begin{figure}[h]
+  \begin{center}
   \includegraphics[width=8cm]{pictures/porteuse.png}
+  \end{center}
   \caption{Carrier signal (central frequency $F_c$)}
   \label{fig:signal_porteur}
 \end{figure}
 
 \begin{figure}[h]
+  \begin{center}
   \includegraphics[width=8cm]{pictures/signal_mod.png}
+  \end{center}
   \caption{Modulated signal in \textsc{fsk} at $F_c \pm \frac{\Delta f}{2}$ frequencies received by the \texttt{VR5000}}
   \label{fig:signal_module}
 \end{figure}
 
 \begin{figure}[h]
+  \begin{center}
   \includegraphics[width=8cm]{pictures/signal_demod.png}
+  \end{center}
   \caption{Modulating signal at $F_b = 1,2 \ \operatorname{kbit}.\operatorname{s}^{-1}$ bit rate (retrieved by \textsc{fsk} demodulation)}
   \label{fig:signal_modulant}
 \end{figure}
@@ -166,6 +171,7 @@ The transceiver returns an audio signal. It finally decribes $-$ through a Schmi
 %On termine la d\'emodulation \texttt{FSK} en calculant, par \textit{transform\'ee de Fourier}, les amplitudes associ\'ees aux composantes fr\'equentielles $0$ et $1,2$ kHz sur une largeur de fen\^etre de calcul $\Delta t = \frac{1}{F_b}$.
 
 \begin{figure}[h]
+  \begin{center}
   \begin{tabular}{|c|}
     \hline
     $\dots$
@@ -177,6 +183,7 @@ The transceiver returns an audio signal. It finally decribes $-$ through a Schmi
     $\dots$\\
     \hline
   \end{tabular}
+  \end{center}
 \caption{Data bits associated to the modulating signal}
 \label{fig:bits_donnees}
 \end{figure}
@@ -184,68 +191,88 @@ The transceiver returns an audio signal. It finally decribes $-$ through a Schmi
 We decode data bits from the \textsc{ax.25} data link layer protocol (\textsc{figure}~\ref{fig:bits_sans_ax25}).
 
 \begin{figure}[h]
+  \begin{center}
   \begin{tabular}{|c|}
     \hline
     $\dots$ \textcolor{rltgreen}{\texttt{10101010}} $\dots$\\
     \hline
   \end{tabular}
+  \end{center}
   \caption{Data bits decoded from \texttt{AX.25} packets}
   \label{fig:bits_sans_ax25}
 \end{figure}
 
 At the end of the process we evaluate data bits as defined by \textsc{iitb}'s specification\cite{IITB}.
 
-\subsection{Digital signal at 145,980 MHz : Beacon}
+\newpage
+
+\section{Digital signal at 145,980 MHz : Beacon}
 
 In the same way the transceiver demodulates a signal of central frequency $F_c = 145,980$ MHz (\textsc{figure}~\ref{fig:signal_ook}). Considering a bit rate of $F_b = 10 \ \operatorname{bit}.\operatorname{s}^{-1}$, the presence of the amplitude associated to the frequency component $F_c$ matches with a pulse and the abscence with no pulse as specified by \textsc{on-off keying} (\textsc{figure}~\ref{fig:impulsions_morse}).
 
 \begin{figure}[h]
+  \begin{center}
   \includegraphics[width=8cm]{pictures/sans_porteuse.png}
+  \end{center}
   \caption{Modulated signal in \textsc{ook} of fr\'equency $F_c$ received by the transceiver}
   \label{fig:signal_ook}
 \end{figure}
 
 We demodulate the digital baseband transmission method considering that a logical \texttt{1} matches with a pulse of a time length that equals to a \textsc{dit} with \textsc{dits}, \textsc{dah} and $\varepsilon$ (no impulse) (\textsc{figure}~\ref{fig:impulsions_morse}).
 
-\begin{figure}[]
+\begin{figure}[h]
+  \begin{center}
   \begin{tabular}{|c|}
     \hline
     $\dots$ \textcolor{rltred}{\texttt{...- ..- ..--- -- -.. --.-}} $\dots$\\
     \hline
   \end{tabular}
+  \end{center}
   \caption{Digitized signal associated to pulses}
   \label{fig:impulsions_morse}
 \end{figure}
 
 We finally decode \textsc{morse} to retrieve the information on two channels ({ \color{rltgreen}{green} } arrows on the previous flowchart). We have two files with the same information.
 
-\begin{figure}[]
+\begin{figure}[h]
+  \begin{center}
   \begin{tabular}{|c|}
     \hline
     $\dots$ \textcolor{rltgreen}{\texttt{VU2MDQ}} $\dots$\\
     \hline
   \end{tabular}
+  \end{center}
   \caption{\textsc{Morse} decoded information}
   \label{fig:info_decode_morse}
 \end{figure}
 
-\subsection{Gain and phase detection : TEC information}
+
+\section{Gain and phase detection : TEC information}
 
 Eight channels ({ \color{oneblue}{blue} } arrows on the previous flowchart) will allow us to acquire the \textsc{ad8302} Gain and Phase Detectors. We directly save voltage measurements in a file. \textsc{tec} retrieving will be done as post-processing with an external Matlab program.
 
-\section{Theory and Implementation}
+\chapter{Acquiring and decoding}
 \label{sec:theory}
 
-\subsection{Antenna rotor control}
+\section{First steps}
+
+\noindent
+\textbf{Repository.} You can find the final software en environment in the \href{https://github.com/EmptyStackExn/ipgp-pratham-gs-essential}{\texttt{ipgp-pratham-gs-essential}} repository.
+
+\section{Antenna rotor control}
 
 \begin{figure}[h]
+  \begin{center}
   \includegraphics[width=8cm]{pictures/nova3.png}
+  \end{center}
 \caption{NLSA Nova software}
 \label{fig:nlsa_nova}
 \end{figure}
 
 \begin{figure}[h]
+  \begin{center}
   \includegraphics[width=6cm]{pictures/orbitdra.png}
+  \end{center}
 \caption{Earth orbit representation}
 \label{fig:aos_los}
 \end{figure}
@@ -261,11 +288,7 @@ The antenna rotor will be entirely managed by NLSA Nova software~\cite{nova_um} 
   Technical details on the software usage can be found at \textsc{Appendix II}.
 \end{remark}
 
-\subsection {Earth orbit model}
-
-The Earth orbit model chosen is \textsc{sgp4/sdp4} model for the following reasons: (ref ?)
-
-\subsection {Time-based job scheduling}
+\section {Time-based job scheduling}
 
 \textbf{Method.}
 AOS and LOS time information files can be generated by Nova (usual file name \texttt{Nova listing data.TXT}) as specified below:
@@ -310,8 +333,10 @@ We suggest the following algorithm (\textsc{algorithm}~\ref{algo_timer}, \textsc
 \end{algorithmic}
 \end{algorithm}
 
-\begin{figure*}[]
+\begin{figure*}[h]
+  \begin{center}
   \includegraphics[width=17.5cm]{pictures/minuterie.png}
+  \end{center}
 \caption{Scheduler implemented in LabVIEW}
 \label{fig:algo_timer_labview}
 \end{figure*}
@@ -321,7 +346,7 @@ We suggest the following algorithm (\textsc{algorithm}~\ref{algo_timer}, \textsc
   If we assume $\varepsilon > 0$ we label $F_r$ the scheduler refresh rate. We may have an acquisition start delay of $\frac{1}{F_r} - \varepsilon$. Moreover if we assume the logging acquisition loop is called with $F_e$ and $N$, we may have a acquisition overflow of $\frac{N}{F_e} - \varepsilon$ (acquisition window length).
 \end{remark}
 
-\subsection{Acquisition loop}
+\section{Acquisition loop}
 
 \noindent
 \textbf{Repository.} A set of tools for acquisition matters are available in the \href{https://github.com/EmptyStackExn/ipgp-pratham-daq-collection}{\texttt{ipgp-pratham-daq-collection}} repository. Final sources are supposed to be compiled with NI Application Builder~\cite{NI_compiler}~\cite{NI_application_builder}.
@@ -360,69 +385,12 @@ A sequence of acquisitions is implemented by an acquisition loop (\textsc{algori
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Sampling}
-We suggest to introduce some denotations for further configurations.
 
-\begin{notation}
-  Let $x$ be a discrete signal of $N$ samples indexed by a set $I$ in the form $x : I \rightarrow \mathbb{R}, t \mapsto x(t)$. We denote the following physical quantities
-  \begin{description}
-  \item[$F_c$]{ : central frequency [Hz]}
-  \item[$\Delta f$]{ : bandwidth length [Hz]}
-  \item[$F_e$]{ : sampling rate [Hz]}
-  \item[$F_b$]{ : bit rate of the modulated signal [Hz = $\operatorname{bits}.\operatorname{s}^{-1}$]}
-  \item[$N$]{ : number of samples [1]}
-  \item[$\Delta t$]{ : acquisition window length [s]}
-  \end{description}
-\end{notation}
-
-\noindent
-\textbf{Configuration.} The usage of \texttt{DAQ Assistant} function is deprecated but still remains possible with the following configuration:
-\begin{itemize}
-  \item{\texttt{Acquisition mode} : choose \texttt{Continuous Samples}}~\cite{NI_continuous_samp}
-  \item{\texttt{Samples to Read} : $N$}
-  \item{\texttt{Rate (Hz)} : $F_e$}
-\end{itemize}
-
-\begin{remark}
-  (\textsc{fifo memory})
-  The NI USB-6353 Acquisition Box has a \textsc{fifo} memory size of $4095$ samples~\cite{NI_6353_datasheet} (consequence ?).
-\end{remark}
-
-\begin{remark}
-  \textsc{(complexity)}
-  Le co\^ut en temps de la fonction \texttt{DAQ Assistant} s'exprime en $\Omega(N)$\cite{omega} et prend un temps $\Delta t = \frac{N}{F_e}$ entre l'appel de fonction et le retour des valeurs.
-\end{remark}
-
-Signal post-processing allows us to choose a specific \textsc{window length} for further digitizing. For a signal of bit rate $F_b$ the window length is defined as
-\begin{eqnarray*}
-  \frac{1}{F_b}
-\end{eqnarray*}
-
-Assuming the \textsc{fm} demodulation process done by the transceiver, the sampling rate can be focused only on the bit rates in the signal.
-\begin{theorem} (\textsc{Nyquist-Shannon}~\cite{Nyquist}~\cite{Shannon})
-  \begin{eqnarray}
-    F_e \geq 2 \times \operatorname{max} \left \{ F_{b_1} ; F_{b_2} \right \}
-  \end{eqnarray}
-\end{theorem}
-
-\begin{remark}
-  \textsc{(optimal sampling)}
-  Le th\'eor\`eme \'enonce que, pour un signal num\'erique, la fr\'equence d'acquisition de base th\'eorique est de $0,5$ Hz par baud. En pratique, il faudrait au moins entre $0,7$ et $0,8$ Hz par baud\cite{FV}.
-\end{remark}
-
-The \textsc{ni usb-6353} Acquisition Box on multi-channel is able to deliver a maximum sampling rate (aggregate) on multi-channel~\cite{NI_6353_datasheet} of
-\begin{eqnarray*}
-  F_{e_{\text{MAX}}} &=& 1.00 \text{ MS.s$^{-1}$}\\
-                &=& 1.00 \times 10^6 \text{ Hz}
-\end{eqnarray*}
-
-L'acquisition de toutes les voies devant \^etre quasi-simulaltan\'ee, il para\^it trivial que toutes les voies soient au moins \'echantillon\'ees \`a $2 \times 2,4 \times 10^3 = 4,8 \times 10^3$ Hz (par application du th\'or\`eme pr\'ec\'edent). On note cependant que certains \textsc{dsp} ne se limitent qu'\`a $4 \times F_c$ pour des raisons de surcharge de calculs~\cite{TI_MSP430}.
-
-En consid\'erant un post-traitement des op\'erations de nu\'erisation des signaux, on peut alors, pour des raisons de pr\'ecision de mesures, \'echantilloner chacune des voies \`a 10 kHz.
-
-\subsection{Frequency component detection}
+\section{Frequency component detection}
 
 { \color{rltred}{\Radioactivity} } This section may be omitted from the understanding of the software system. It is only suggested as a reminder for the use of \textsc{fft}-based \textsc{spectrum analyzers}.
+
+\textbf{Repository.} We provide however an implementation in \textsc{c} of a FFT$-$based sprectum analyzer in the \href{https://github.com/EmptyStackExn/spectra}{\texttt{spectra}} repository.
 
 \begin{definition}
 \textsc{(frequency spectrum)}
@@ -446,24 +414,24 @@ We then have\cite{Senlis} :
         &=& \sqrt{\mathfrak{Re} \left ( \hat{x} \left (\frac{f.N}{F_e} \right ) \right )^2 + \mathfrak{Im} \left ( \hat{x} \left (\frac{f.N}{F_e} \right ) \right )^2}
 \end{eqnarray*}
 
-\subsection{FM demodulation}
+\section{FM demodulation}
 
 We assume \textsc{fsk} and \textsc{ook} demodulation to be made by the \textsc{vr5000} Transceiver. Retrieving bits of data refers to the \textsc{nrz} decoding section.
 
-\subsection{NRZ decoding}
+\section{NRZ decoding}
 
 \noindent
-\textbf{Repository.} The \textsc{nrz} decoder is available in the \href{https://github.com/EmptyStackExn/nrz-decoder}{\texttt{nrz-decoder}} repository.
+\textbf{Repository.} The \textsc{nrz} decoder is available in the \href{https://github.com/EmptyStackExn/ipgp-nrz-decoder}{\texttt{ipgp-nrz-decoder}} repository.
 
 \noindent
 \textbf{Specification.}
   The digital baseband transmission method is of the kind non-return-to-zero (\textsc{nrz}). In other words, logical \texttt{1} matches with one significant condition and logical \texttt{0} with another.
 
-We assume we have a \textsc{fm} demodulated signal and that we will only focus on shaping issue.
+We assume we have a \textsc{fm} demodulated signal and that we will only focus on shape issue. We suggest different algorithms for same purposes.
 
 \begin{proposition}
   \textsc{(samples per window)}
-  We denote $N_w$ the number of samples per calculation window. Assume one logic bit on a time duration $\Delta t = \frac{1}{F_b}$. We have:
+  We denote $N_w$ as the number of samples per calculation window. Assume one logic bit to be on a time duration $\Delta t = \frac{1}{F_b}$. We have:
   \begin{eqnarray}
     N_w = \frac{F_e}{F_b}
   \end{eqnarray}
@@ -471,23 +439,13 @@ We assume we have a \textsc{fm} demodulated signal and that we will only focus o
   The calculation window length (expressed in number of samples) of the digitizer is $\frac{F_e}{F_b}$.
 \end{proposition}
 
-\begin{proposition}
-  \textsc{(mean formula)}
-  Let $N \in \mathbb{N}$ and $x : \left \{ 0 ; \dots ; N - 1 \right \} \rightarrow \mathbb{R}$ be a signal of $N$ samples. We denote $\operatorname{mean} (x)$ the \textit{mean of the signal} $x$ such that:
-  \begin{eqnarray*}
-    \mathbb{R}^{\left \{ 0 ; \dots ; N - 1 \right \}} &\rightarrow& \mathbb{R}\\
-    \operatorname{mean} : x &\mapsto& \frac{1}{N}\sum^{N - 1}_{i = 0}{f(i)}
-  \end{eqnarray*}
-\end{proposition}
-
-
 \begin{algorithm}[h]
-\caption{Num\'erisation FSK}
+\caption{NRZ decoder based on mean comparison}
 \label{algo_numerisation_FSK}
 \begin{algorithmic}[1]
-  \REQUIRE signal $x$ \`a $N$ valeurs, amplitude de $f_0$ : $A(f_0)$ et amplitude de $f_1$ : $A(f_1)$
-  \STATE $\texttt{moyenne} \leftarrow \frac{1}{N}\sum^N_{i = 0}{x(i)}$
-  \IF {$\left | \texttt{moyenne} - A(f_0) \right | > \left | \texttt{moyenne} - A(f_1) \right |$}
+  \REQUIRE signal $x$ \`of $N$ values, amplitude of $f_0$ : $A(f_0)$ and amplitude of $f_1$ : $A(f_1)$
+  \STATE $\texttt{mean} \leftarrow \frac{1}{N}\sum^N_{i = 0}{x(i)}$
+  \IF {$\left | \texttt{mean} - A(f_0) \right | > \left | \texttt{mean} - A(f_1) \right |$}
   \RETURN \texttt{0}
   \ELSE
   \RETURN \texttt{1}
@@ -495,9 +453,9 @@ We assume we have a \textsc{fm} demodulated signal and that we will only focus o
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{AX.25 packets decoding}
+\section{AX.25 packets decoding}
 
-\textbf{Repository.} ???
+\textbf{Repository.} The \textsc{ax.25} decoder is available in the \href{https://github.com/EmptyStackExn/ipgp-ax25-decoder}{\texttt{ipgp-ax25-decoder}} repository.
 
 \begin{definition}
   { \color{rltred}{\Radioactivity} }
@@ -509,43 +467,18 @@ We assume we have a \textsc{fm} demodulated signal and that we will only focus o
   The whole number $b_0$ is called the \textit{least significant bit} (\textsc{lsb}) and the number $b_{n_0}$ the \textit{most significant bit} (\textsc{msb}).
 \end{definition}
 
-\begin{example}
-  Let $x = 42$ in decimal representation, we denote $(x)_{\textup{bin}}$ the binary representation of $x$ in the usual positional notation. We have:
-  \begin{eqnarray*}
-    (x)_{\textup{bin}} = \underbrace{1}_{\textup{MSB}}0101\underbrace{0}_{\textup{LSB}}
-  \end{eqnarray*}
-
-%% comment!
-\begin{comment}
-\begin{figure}[h]
-  \begin{tabular}{|c|}
-    \hline
-    $\dots$
-    \textcolor{rltred}{$\underbrace{\texttt{01111110}}_{\textup{debut de trame}}$}
-    $\dots$
-    \textcolor{rltgreen}{$\underbrace{\texttt{10101010}}_{\textup{information}}$}
-    $\dots$
-    \textcolor{rltred}{$\underbrace{\texttt{01111110}}_{\textup{fin de trame}}$}
-    $\dots$\\
-    \hline
-  \end{tabular}
-\caption{Bits de donn\'ees correspondant au signal modulant}
-\label{fig:geometry}
-\end{figure}
-\end{comment}
-
-\end{example}
-
 \begin{remark}
-  (\textsc{boutisme de bits})
+  (\textsc{bit endianness})
   Every bytes (words on bits of length $8$) of a \textsc{ax.25} packet (except for the FCS unit) are received with the \textsc{least significant bit} first\cite{IITB}.
 \end{remark}
 
-On note l'alphabet $\mathbb{B} = \{\texttt{0} ; \texttt{1}\}$.
+We define the alphabet $\mathbb{B}$ as $\{\texttt{0} ; \texttt{1}\}$ and give the following definition for a standard Pratham AX.25 packet.
 
 \begin{definition}
   \textsc{(ax.25 packet of pratham)}
-  A word $m$ on $\mathbb{B}^{\star}$ is an \textsc{ax.25 packet of pratham}~\cite{IITB}~\cite{ax25} if there exists the following words (or \textsc{units}) of which it the concatenation (\`a un facteur \textit{fanion} pr\`es):
+  A word $m$ on $\mathbb{B}^{\star}$ is an \textsc{ax.25 packet of pratham}~\cite{IITB}~\cite{ax25} if there exists a sequence of the following words (or \textsc{units}) (at one flag at least):
+
+\begin{center}
   \begin{footnotesize}
     \begin{tabular}{|c|c|c|c|c|c|c|}
       \hline
@@ -557,6 +490,9 @@ On note l'alphabet $\mathbb{B} = \{\texttt{0} ; \texttt{1}\}$.
       \hline
     \end{tabular}
   \end{footnotesize}
+\end{center}
+
+
 \begin{center}
   \begin{footnotesize}
     \begin{tabular}{|c|c|c|c|c|c|c|c|}
@@ -589,31 +525,11 @@ On note l'alphabet $\mathbb{B} = \{\texttt{0} ; \texttt{1}\}$.
 
 The information unit description is defined in \cite{IITB}.
 
-\begin{theorem}
-  { \color{rltred}{\Radioactivity} }
-  \textsc{(Kleene)} Soit un alphabet fini $\Sigma$.
-  \begin{eqnarray*}
-    \operatorname{Rat} \Sigma^{\star} = \operatorname{Rec} \Sigma^{\star} 
-  \end{eqnarray*}
-\end{theorem}
 
-\begin{proposition}
-  { \color{rltred}{\Radioactivity} }
-  Soit $e$ une expression rationnelle d\'enotant un langage $L(e)$ sur l'alphabet $\mathbb{B}$ tel que :
-  \begin{eqnarray}
-    \exists u \in \mathbb{B}^{\star} \ \forall w \subset u \
-    \left\{\begin{matrix}
-        e &=& (\texttt{01111110}) . u . (\texttt{01111110})^{\star}\\ 
-        w &\neq& \texttt{01111110}
-      \end{matrix}\right.
-  \end{eqnarray}
-Il existe un automate fini $A$ tel que $A$ reconnaisse $L (e)$.
-\end{proposition}
-
-\begin{remark}
-  (\textsc{syntaxe des trames Pratham en AX.25})
-  La syntaxe des trames du protocole AX.25 est pr\'esent\'ee en \textsc{figure}~\ref{fig:EBNF_ax25} afin d'impl\'ementer un analyseur syntaxique.
-\end{remark}
+\begin{lemma}
+  (\textsc{syntax grammar of AX.25 packet bits})
+  The grammar for AX.25 packets given in ~\ref{fig:EBNF_ax25} is linear. Thus, there exists a finite state transducer which parses this grammar.
+\end{lemma}
 
 \begin{figure*}
 {\scriptsize
@@ -630,99 +546,29 @@ information ::= (* pratham *)
 fcs         ::= (* attention au boutisme *)
 \end{verbatim}
 }
-\caption{Syntaxe des trames Pratham en AX.25 en notation EBNF}
+\caption{Grammar of Pratham packets en AX.25}
 \label{fig:EBNF_ax25}
 \end{figure*}
+
+\begin{remark}
+  \textsc{(bit stuffing)}
+  Bit stuffing coding is able to seperate flags \texttt{01111110} (hexad\'ecimal \texttt{7E}) from real information given in AX.25 packets\cite{IITB}. During data reception, we ignore \texttt{0} at each successive occurence of \texttt{1} after packets seperation operations.
+\end{remark}
 
 
 \begin{implementation}
   (\textsc{algorithme~\ref{algo_decoupage_trames_ax25}})
   { \color{rltred}{\Radioactivity} }
-  On proc\`ede \`a une analyse lexicale sur les bits de donn\'ees, d'o\`u l'int\'er\^et et l'usage d'automates finis, afin de d\'ecouper les trames s\'epar\'ees par des fanions. On impl\'emente un analyseur lexical munie d'une file\cite{Comment2}~\cite{Knuth} avec \texttt{ocamllex}~\cite{ocaml_parsing}.
+  We use a finite state transducer in order to parse sequences of AX.25 packets.
 \end{implementation}
 
-\begin{algorithm}[h]
-\caption{D\'ecoupage de trames AX.25}
-\label{algo_decoupage_trames_ax25}
-\begin{algorithmic}[1]
-  \REQUIRE mot $m = m_0 \dots m_{p  - 1}$ sur l'alphabet $\mathbb{B}$ de longueur $p$
-  \STATE mot vide $a$ \hfill //\textit{accumulateur indiquant l'ouverture ou non d'une nouvelle trame}
-  \STATE liste vide $l$
-  \STATE \textbf{analyse lexicale} de $m$ \textbf{faire}
-  \STATE \textbf{parse} \texttt{01111110} :
-  \IF {une trame n'est pas ouverte}
-  \STATE ouvrir une nouvelle
-  \ELSE
-  \IF {une trame est d\'ej\`a ouverte,}
-  \IF {elle n'est pas vide}
-  \STATE la refermer et l'enfiler dans $l$
-  \ENDIF
-  \ENDIF
-  \ENDIF
-  \STATE \textbf{parse} \texttt{\_} :
-  \IF {une trame est d\'ej\`a ouverte}
-  \STATE {concat\'ener le bit \texttt{\_} dans la trame}
-  \ELSE
-  \STATE ne rien faire \hfill \textit{//bits perdus car aucune trame ouverte}
-  \ENDIF
-  \STATE \textbf{fin analyse lexicale}
-  \RETURN liste $l$ de mots binaires dont chaque \'el\'ement est une trame
-\end{algorithmic}
-\end{algorithm}
-
-\begin{remark}
-  \textsc{(bourrage de bit)}
-  Le fanion \texttt{01111110} (\texttt{7E} hexad\'ecimal) ne peut donc, en aucun cas, avoir d'occurence dans de trames compl\`etes\cite{IITB}. Le proc\'ed\'e de \textit{bourrage de bit} (\textit{bit stuffing}) permet alors d'eviter la confusion entre les donn\'ees et les fanions. Durant la r\'eception des donn\'ees, on ignore le bit \texttt{0} \`a chaque occurence de cinq bits \text{1} cons\'ecutifs, apr\`es les op\'erations de d\'ecoupages de trames.
-\end{remark}
-
-\begin{implementation}
-  (\textsc{algorithme~\ref{algo_extract_bit_stuffing}})
-  { \color{rltred}{\Radioactivity} }
-  Apr\`es le d\'ecoupage des trames, on extrait, de chaque trame, les bits de bourrage.
-\end{implementation}
-
-\begin{algorithm}[h]
-\caption{Extraction du bit de bourrage}
-\label{algo_extract_bit_stuffing}
-\begin{algorithmic}[1]
-  \REQUIRE mot $m = m_0 \dots m_{p  - 1}$ sur l'alphabet $\mathbb{B}$ de longueur $p$, $\cdot . \cdot$ la concat\'enation de deux mots
-  \STATE mot vide $m'$
-  \STATE compteur $c \leftarrow 0$
-  \FOR {$i$ de $0$ \`a $p$}
-  \IF {$m_i = 0$}
-  \IF{$c = 5$}
-  \STATE $c \leftarrow 0$
-  \ELSE
-  \STATE $c \leftarrow 0$
-  \STATE $m' \leftarrow m'.0$    
-  \ENDIF
-  \ELSE
-  \STATE $c \leftarrow c + 1$
-  \STATE $m' \leftarrow m' . 1$
-  \ENDIF
-  \ENDFOR
-  \RETURN $m'$
-\end{algorithmic}
-\end{algorithm}
-
-\begin{implementation}
-  (\textsc{algorithme~\ref{algo_decodage_ax25}})
-  { \color{rltred}{\Radioactivity} }
-  En consid\'erant que chaque unit\'e de trame, n'a pas le m\^eme boutisme de bits, on peut alors d\'ecouper les unit\'es \texttt{Adresse}, \texttt{Contr\^ole}, \texttt{PID}, \texttt{Information}, \texttt{FCS} et calculer leur repr\'esentation suivant la sp\'ecification \'etablie.
-\end{implementation}
-
-\begin{algorithm}[h]
-\caption{Pattern-matching on AX.25 packets}
-\label{algo_decodage_ax25}
-\begin{algorithmic}[1]
-  \REQUIRE liste de mots $l$
-\end{algorithmic}
-\end{algorithm}
 
 
-\subsection{Morse decoding}
 
-\textbf{Repository.} The Morse decoder is available in the \href{https://github.com/EmptyStackExn/morse-decoder}{\texttt{morse-decoder}} repository.
+
+\section{Morse decoding}
+
+\textbf{Repository.} The Morse decoder is available in the \href{https://github.com/EmptyStackExn/ipgp-morse-decoder}{\texttt{ipgp-morse-decoder}} repository.
 
 \textbf{Link.} Simplex (\textsc{ansi} definition)
 
@@ -739,7 +585,7 @@ The Morse code specification for the satellite beacon signal is the same as prov
 \end{enumerate}
 
 \begin{definition}
-  We denote $\mathbb{B}$ the set of bits, $\mathbb{M}$ the Morse alphabet and $\mathbb{N}_{255}$ the ASCII representable characters as follows:
+  We denote $\mathbb{B}$ as the set of bits, $\mathbb{M}$ the Morse alphabet and $\mathbb{N}_{255}$ the ASCII representable characters as follows:
   \begin{eqnarray*}
     \mathbb{B}      &=& \left \{ \texttt{0} ; \texttt{1} \right \}\\
     \mathbb{M}      &=& \left \{ \varepsilon_1, \varepsilon_3, \varepsilon_7, ., - \right \}\\
@@ -800,34 +646,7 @@ The Morse code specification for the satellite beacon signal is the same as prov
 \label{fig:transducteur_morse}
 \end{figure*}
 
-\subsection{Measurement accuracy}
-
-The ADC has a resolution of $16$ bits. We denote $Q$ as the \textsc{resolution} or \textsc{least significant bit voltage} (in volts). The maximum error that the instrument gives under the usual conditions are given by the ADC specifications (Section \textit{AI Absolute Accuracy Table}, p.5)~\cite{NI_6353_datasheet} and are confirmed by the following calculation for a \textsc{span} of $20 \operatorname{V}$:
-\begin{eqnarray*}
-  Q &=& \frac{E_{\textup{FSR}}}{N}\\
-    &=& \frac{V_{\textup{RefHi}} - V_{\textup{RefLow}}}{2^M - 1}\\
-    &=& \frac{10 - (-10)}{2^{16} - 1}\\
-    &\simeq& 0.0001520 \operatorname{V}
-\end{eqnarray*}
-
-where :
-
-\begin{description}
-  \item[$E_{\textup{FSR}}$]{ : full scale voltage range (V)}
-  \item[$N$]{ : number of voltage intervals [1]}
-  \item[$V_{\textup{RefHi}}$]{ : upper extreme coding voltage (V)}
-  \item[$V_{\textup{RefLow}}$]{ : lower extreme coding voltage (V)}
-  \item[$M$]{ : ADC resolution (bits)}
-\end{description}
-
-Considering that $V_{\textup{RefHi}} = 10 \operatorname{V}$, for all acquired voltage $U_a$, $U_a$ will be expressed in scientific notation as follows:
-\begin{eqnarray*}
-  U_a = \left ( d_1.d_2d_3d_4d_5d_6d_7d_8 \pm 0.0001520 \right ) \operatorname{V}
-\end{eqnarray*}
-
-We then decide to keep $8$ digits for a voltage measured with this ADC. However, further calculations have to be based on the number of \textsc{significant digits} which is $6$. 
-
-\subsection{Data logging}
+\section{Data logging}
 
 We remind that data logging rules are specified in \textit{Pratham satellite : File format specification document}\cite{IITB_filespec}. Duration of satellite AOS depends on the following parameters:
 
@@ -886,18 +705,18 @@ We give a preliminary estimation of total logging file sizes considering that a 
 
 
   \begin{eqnarray}
-    l_{\textup{fichier}} &=& \underbrace{\Delta t}_{\in \left [ 7 ; 13 \right ] \ \operatorname{min}} \times \underbrace{f_e}_{10 \ \operatorname{kHz}} \nonumber\\
+    l_{\textup{file}} &=& \underbrace{\Delta t}_{\in \left [ 7 ; 13 \right ] \ \operatorname{min}} \times \underbrace{f_e}_{10 \ \operatorname{kHz}} \nonumber\\
                     &\times& \underbrace{\left (\underbrace{l_{\textup{date}}}_{23 \ \operatorname{octets}} + \underbrace{n_{\textup{voies}}}_{12} \times (\underbrace{l_{\textup{flottant}}}_{12 \ \operatorname{octets}} + \underbrace{l_{\textup{separateur}}}_{1 \ \operatorname{octet}} ) \right )}_{\textup{une ligne}}\\
                     &\in& \left [ 7,518 \times 10^8 ; 1,3962 \times 10^9 \right ] \\
-                    &\ &  \textup{car } \Delta t \mapsto l_{\textup{fichier}} (\Delta t) \ \textup{croissante} \nonumber
+                    &\ &  \textup{as } \Delta t \mapsto l_{\textup{fichier}} (\Delta t) \ \textup{increases} \nonumber
   \end{eqnarray}
 
-En se basant sur une estimation du nombre de passages du satellite au dessus de Paris\cite{IPGP_simul_loic} :
+Considering a estimation model for the number of satellite AOS over Paris\cite{IPGP_simul_loic} :
 \begin{eqnarray}
-  n_{\textup{passages/jour}} \in \left [ 4 ; 6 \right ] \ \textup{passages}
+  n_{\textup{AOS/day}} \in \left [ 4 ; 6 \right ] \ \textup{AOS}
 \end{eqnarray}
 
-On a alors par jour :
+We then have, per day :
 
 \begin{eqnarray}
   l_{\textup{jour}} &=& n_{\textup{passages/jour}} \times l_{\textup{fichier}}\\
@@ -947,41 +766,16 @@ Par passage de satellite, on n'obtient que 7200000 valeurs pour les slanTEC (cal
 
 Dans le cadre d'une solution provisoire, on se permet d'utiliser le format de fichier de ``LabVIEW Measurement File''~\cite{NI_lvm} (\underline{solution \`a probleme car enregistre avec la date d'enregistrement et non la date d'acquisition}).
 
-\subsection{Tol\'erance aux fautes}
-Le syst\`eme de tol\'erance aux fautes se limite qu'\`a une gestion des exceptions par LabVIEW qui lors d'une exception poursuit l'acquisition et effectue un rapport.
-
-\subsection{Ground station software environment}
-
-\noindent
-\textbf{Repository.} You can find the final software en environment in the \href{https://github.com/EmptyStackExn/ipgp-pratham-gs-essential}{\texttt{ipgp-pratham-gs-essential}} repository.
-
-\section{Formats de fichier}
+\chapter{File formats}
 \label{sec:file_formats}
 
-\subsection{\'El\'evations minimales/maximales fournies par Nova}
+\section{Nova AOS/LOS timestamps file format}
 
-Nous donnons ci-dessous la syntaxe en EBNF des fichiers de donn\'ees sur les \'el\'evations minimales et maximales d'un satellite par rapport \'a un r\'ef\'erentiel g\'eographique.
+We give in EBNF the syntax grammar for AOS and LOS information returned by Nova. We show that a part of this grammar is linear. Thus, the formed language is regular and there exists a regular expression which denotes it. We then parse a file using the \texttt{Scan From String}~\cite{NI_scan_from_string} function. 
 
-LabVIEW, \'etant langage de programmation peu adap\'e \`a certains paradigmes, ne dispose pas de g\'en\'erateur d'analyseur syntaxique, ni lexical mais d'un analyseur par formats. Nous impl\'ementons provisoirement une analyse formatt\'ee avec la fonction \texttt{Scan From String}~\cite{NI_scan_from_string} (\textit{analyseur par formats d'une cha\^ine de caract\`eres \`a l'aide d'indicateurs de conversion}). On se propose de donner une preuve de correction de l'algorithme utilisant cet analyseur (\textsc{algorithme}~\ref{algo_scan_parse_nova}, \textsc{impl\'ementation}~\ref{fig:algo_scan_parse_nova_labview})~\cite{Knuth}.
-%todo
 
-\begin{algorithm}[h]
-\caption{Analyse formatt\'ee des fichiers d'\'eph\'em\'erides de Nova}
-\label{algo_scan_parse_nova}
-\begin{algorithmic}[1]
-  \REQUIRE $F$ : fichier
-  \STATE hello world
-  \RETURN $s$
-\end{algorithmic}
-\end{algorithm}
-
-\begin{figure*}[]
-  \includegraphics[width=17cm]{pictures/parser_nova_labview.png}
-\caption{Impl\'ementation d'une analyse formatt\'ee en LabVIEW}
-\label{fig:algo_scan_parse_nova_labview}
-\end{figure*}
-
-\begin{figure*}
+\begin{figure*}[h]
+{\scriptsize
 \begin{verbatim}
 Nova satellite AOS/LOS file
 --------
@@ -1001,30 +795,36 @@ character    ::= 'a'|'b'|..|'A'|'B'|..|'0'|'1'|..
 int_number   ::= [ '-' | '+' ] { '0' | .. | '9' }
 float_number ::= [ '-' | '+' ] { '0' | ... | '9' } '.' { '0' | ... | '9' }
 \end{verbatim}
-\caption{Syntaxe des fichiers d'\'el\'evations minimales/maximales de Nova en notation EBNF}
+}
+\caption{Grammar of AOS/LOS information returned by Nova}
 \label{fig:EBNF_Nova}
 \end{figure*}
 
-\begin{figure*}
-{\scriptsize
-\begin{verbatim}
+\begin{lemma}
+  The restriction of ~\ref{fig:EBNF_Nova} whose start symbol is \texttt{day\_eclipses} is a linear grammar.
+\end{lemma}
 
-          Date (Z)           AOS (Z )  LOS (Z ) Duration  Between Az @ AOS Max El Az @ LOS Height  km 
-ITUPSAT,1 at Paris ,France                                                                            
-          16/04/12           10:55:23  11:05:03 00:09:40 01:01:01    38°     7°     126°      714.6   
-          16/04/12           12:32:01  12:46:13 00:14:12 01:26:57    17°     58°    185°      714.6   
-          16/04/12           14:10:15  14:23:00 00:12:43 01:24:02     4°     22°    236°      714.7   
-
-\end{verbatim}
-}
-\caption{Exemple de fichier de pr\'evisions de passages de satellite produit par Nova}
-\label{fig:EBNF_Nova2}
+\begin{figure*}[h]
+  \includegraphics[width=17cm]{pictures/parser_nova_labview.png}
+  \caption{Regular expression which denotes the restriction whose start symbol is \texttt{day\_eclipses}}
+\label{fig:algo_scan_parse_nova_labview}
 \end{figure*}
 
-\subsection{Enregistrements Pratham}
-Les formats de fichier qui seront utilis\'ees pour l'enregsitrement des donn\'ees de TEC vertical et slant sont sp\'ecifi\'ees dans le document ??? dont on donne une syntaxe en notation EBNF en ~\ref{fig:syntaxe_Pratham_format}.
+\begin{lemma}
+  There exists a regular expression which denotes the language formed by the restriction of ~\ref{fig:EBNF_Nova} and is given in \ref{fig:algo_scan_parse_nova_labview}.
+\end{lemma}
 
-\begin{figure*}[]
+
+
+
+
+
+
+
+\section{Pratham data log}
+Pratham file formats decided betwwen IPGP and IITB for vertical and slant TEC are specified in ??? whose we give a syntax grammar in EBNF in ~\ref{fig:syntaxe_Pratham_format}.
+
+\begin{figure*}[h]
 {\scriptsize
 \begin{verbatim}
 Raw output file from ground station acquisition (RAW_PRAT_SSSS_yyyy_ddd_hh_mm_ss.txt)
@@ -1049,153 +849,113 @@ float_number ::= [ '-' | '+' ] { '0' | ... | '9' } '.' { '0' | ... | '9' }
 
 \end{verbatim}
 }
-  \caption{Syntaxe des enregistrements au format Pratham en notation EBNF pour les donn\'ees brutes}
+  \caption{Pratham raw data logs grammar}
   \label{fig:syntaxe_Pratham_format}
 \end{figure*}
 
-Par souci de rigueur, on s'int\'eresse \`a la classe de grammaire \`a laquelle appartient la grammaire $G$ repr\'esentant cette syntaxe.
-
 \begin{proposition}
-  \begin{eqnarray*}
-    G \in LL(1) 
-  \end{eqnarray*} 
+  The grammar \ref{fig:syntaxe_Pratham_format} is linear and forms a regular language.
 \end{proposition}
 
-\begin{proof}
-Montrons que la grammaire est $LL(1)$. Soit la grammaire $G$ dont le symbole de d\'epart est $F$ et dont on donne les ensembles de l\'ex\`emes en figure ~\ref{fig:LL1_pratham_analysis}. $D'$ est annulable.
-  
-On calcule $\text{FIRST}()$ et $\text{FOLLOW}()$ :
-\begin{eqnarray*}
-  \text{FIRST} (F)  &=& \{ \text{SI} \}\\
-  \text{FIRST} (D)  &=& \{ n \}\\
-  \text{FIRST} (L)  &=& \{ n \}\\
-  \text{FIRST} (L') &=& \{ n, \dot{\epsilon} \}
-\end{eqnarray*}
-  
-\begin{eqnarray*}
-  \text{FOLLOW} (F) &=& \varnothing\\
-  \text{FOLLOW} (S) &=& \{ f \}\\
-  \text{FOLLOW} (D) &=& \{ \$ \}\\
-  &\subseteq& \text{FOLLOW} (D') \text{ car } \dot{\epsilon} \in \text{FIRST} (D')\\
-  \text{FOLLOW} (D') &=& \{ \$ \}
-\end{eqnarray*}
 
-Comme montr\'e en ~\ref{fig:LL1_pratham_analysis}, la grammaire ne pr\'esente aucun conflit FIRST/FIRST dans le cas d'une analyse $LL(1)$. Donc :
-
-\begin{eqnarray*}
-  G \in LL(1) 
-\end{eqnarray*}
-\hfill $\square$
-
-\begin{figure*}
-\begin{eqnarray*}
-  \textup{Term} &=& \{ f, n, m, \$, SI, L, STID, STU, ETU, SR, DP, AT, T, 145_0, 145_1, 145_2, 145_3, 437_0, 437_1, 437_2, 437_3 \}\\
-  \textup{NonTerm} &=& \{ F, S, D, D' \}
-\end{eqnarray*}
-
-\begin{eqnarray*}
-  F  &\rightarrow& \text{SI} \ m \ \text{L} \ n : n : f \ n : n : n : f \ n \ \text{STI} \ m \ \text{STU} \ n : n : n : n : n  \ \text{ETU} \ n : n : n : n : n \  \text{SR} \ n \ \text{DP} \ f \ \text{AT} \ n\\
-  && \text{T} \ 145_0 \  145_1 \  145_2 \  145_3 \ 437_0 \ 437_1 \ 437_2 \ 437_3 \ D \ \$ \\
-  S &\rightarrow& n : n : n : n : n\\
-  D  &\rightarrow& S \ f \ f \ f \ f \ f \ f \ f \ f  \ D'\\
-  D' &\rightarrow& \epsilon | S \ f \ f \ f \ f \ f \ f \ f \ f \ D'
-  \end{eqnarray*}
-
-
-  \begin{center}
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-      \hline
-      & SI & L & STI & STU & SR & DP & AT & T & $145_0$ & $145_1$ & $145_2$ & $145_3$ & $437_0$ & $437_1$ & $437_2$ & $437_3$ & $f$ & $m$ & $n$ & : & \$\\
-      \hline
-      $F$  & $\{ F \rightarrow \dots \}$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ \\
-      \hline
-      $S$  & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\{ S \rightarrow \dots \}$ & $\varnothing$ & $\varnothing$\\
-      \hline
-      $D$  & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\{ L \rightarrow \dots \}$ & $\varnothing$ & $\varnothing$\\
-      \hline
-      $D'$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\varnothing$ & $\{ L' \rightarrow n \dots \}$ & $\varnothing$ & $\{ L' \rightarrow \epsilon \}$\\
-      \hline
-    \end{tabular}
-  \end{center}
-  \caption{Table d'analyse LL(1) de la grammaire}
-  \label{fig:LL1_pratham_analysis}
-\end{figure*}
-\end{proof}
-
-\section{Banc d'essai}
+\chapter{Measurement and computation accuracy}
 \label{sec:results}
 
-\section{Preuves de programmes}
-\label{sec:analysis}
+\section {Earth orbit model}
 
-{ \color{rltred}{\Radioactivity} }
-Cette partie donne les preuves de correction des algorithmes mentionn\'es dans l'article. La m\'ethode formelle utilis\'ee sera la \textit{logique de Hoare}\cite{Hoare} (1969) et son cas particulier la preuve par \textit{invariant de boucle}.
+The Earth orbit model chosen is \textsc{sgp4/sdp4} model.
 
-\begin{definition}
-  { \color{rltred}{\Radioactivity} }
-  \textsc{(triplet de Hoare)}
-  Soient $P$, $Q$ des pr\'edicats et \texttt{prog} un programme. Un triplet $T$ est un \textit{triplet de Hoare} si et seulement si
-  \begin{eqnarray*}
-    T = \{P\} \texttt{ prog } \{Q\}
-  \end{eqnarray*}
-\end{definition}
+\section{Measurement accuracy}
 
-\begin{definition}
-  { \color{rltred}{\Radioactivity} }
-  \textsc{(correction d'un programme)}
-  Un triplet de Hoare $\{P\} \texttt{ prog } \{Q\}$ est \textit{vrai} si pour tout \'etat initial v\'erifiant $P$, si l'ex\'ecution de \texttt{prog} termine, alors $Q$ est vraie apr\`es l'ex\'ecution de \texttt{prog}. Le programme \texttt{prog} est dit \textit{correct} par rapport \`a $P$ et $Q$.
-\end{definition}
+The ADC has a resolution of $16$ bits. We denote $Q$ as the \textsc{resolution} or \textsc{least significant bit voltage} (in volts). The maximum error that the instrument gives under the usual conditions are given by the ADC specifications (Section \textit{AI Absolute Accuracy Table}, p.5)~\cite{NI_6353_datasheet} and are confirmed by the following calculation for a \textsc{span} of $20 \operatorname{V}$:
+\begin{eqnarray*}
+  Q &=& \frac{E_{\textup{FSR}}}{N}\\
+    &=& \frac{V_{\textup{RefHi}} - V_{\textup{RefLow}}}{2^M - 1}\\
+    &=& \frac{10 - (-10)}{2^{16} - 1}\\
+    &\simeq& 0.0001520 \operatorname{V}
+\end{eqnarray*}
 
-\subsection{Algorithme 1 : Minuterie}
+where :
 
-\begin{proposition}
-  L'algorithme d\'eclenche une suite de s\'equences d'acquisition $s_i$ \`a des temps pour chaque $s_i$. 
-\end{proposition}
+\begin{description}
+  \item[$E_{\textup{FSR}}$]{ : full scale voltage range (V)}
+  \item[$N$]{ : number of voltage intervals [1]}
+  \item[$V_{\textup{RefHi}}$]{ : upper extreme coding voltage (V)}
+  \item[$V_{\textup{RefLow}}$]{ : lower extreme coding voltage (V)}
+  \item[$M$]{ : ADC resolution (bits)}
+\end{description}
 
-\begin{proof}
-\end{proof}
+Considering that $V_{\textup{RefHi}} = 10 \operatorname{V}$, for all acquired voltage $U_a$, $U_a$ will be expressed in scientific notation as follows:
+\begin{eqnarray*}
+  U_a = \left ( d_1.d_2d_3d_4d_5d_6d_7d_8 \pm 0.0001520 \right ) \operatorname{V}
+\end{eqnarray*}
 
-\subsection{Algorithme 2 : Boucle d'acquisition}
+We then decide to keep $8$ digits for a voltage measured with this ADC. However, further calculations have to be based on the number of \textsc{significant digits} which is $6$. 
 
-\begin{proposition}
-  L'algorithme boucle sur des acquisitions sur un temps fini $\Delta t$.
-\end{proposition}
+\section{Sampling}
+We suggest to introduce some denotations for further configurations.
 
-\begin{proof}
-  Clair.
-\end{proof}
+\begin{notation}
+  Let $x$ be a discrete signal of $N$ samples indexed by a set $I$ in the form $x : I \rightarrow \mathbb{R}, t \mapsto x(t)$. We denote the following physical quantities
+  \begin{description}
+  \item[$F_c$]{ : central frequency [Hz]}
+  \item[$\Delta f$]{ : bandwidth length [Hz]}
+  \item[$F_e$]{ : sampling rate [Hz]}
+  \item[$F_b$]{ : bit rate of the modulated signal [Hz = $\operatorname{bits}.\operatorname{s}^{-1}$]}
+  \item[$N$]{ : number of samples [1]}
+  \item[$\Delta t$]{ : acquisition window length [s]}
+  \end{description}
+\end{notation}
 
-\subsection{Algorithme 3 : Num\'erisation FSK}
-\subsection{Algorithme 4 : Num\'erisation OOK}
-\subsection{Algorithme 5 : D\'coupage de trames AX.25}
-\subsection{Algorithme 6 : Extraction du bit de bourrage}
-\subsection{Algorithme 7 : Pattern-matching on AX.25 packets}
-\subsection{Informations sur la machine d'acquisition}
+\noindent
+\textbf{Configuration.} The usage of \texttt{DAQ Assistant} function is deprecated but still remains possible with the following configuration:
+\begin{itemize}
+  \item{\texttt{Acquisition mode} : choose \texttt{Continuous Samples}}~\cite{NI_continuous_samp}
+  \item{\texttt{Samples to Read} : $N$}
+  \item{\texttt{Rate (Hz)} : $F_e$}
+\end{itemize}
 
-\subsection{Caract\'erisation du bo\^itier d'acquisition}
+\begin{remark}
+  (\textsc{fifo memory})
+  The NI USB-6353 Acquisition Box has a \textsc{fifo} memory size of $4095$ samples~\cite{NI_6353_datasheet}.
+\end{remark}
+
+\begin{remark}
+  \textsc{(complexity)}
+  Le co\^ut en temps de la fonction \texttt{DAQ Assistant} s'exprime en $\Omega(N)$\cite{omega} et prend un temps $\Delta t = \frac{N}{F_e}$ entre l'appel de fonction et le retour des valeurs.
+\end{remark}
+
+Signal post-processing allows us to choose a specific \textsc{window length} for further digitizing. For a signal of bit rate $F_b$ the window length is defined as
+\begin{eqnarray*}
+  \frac{1}{F_b}
+\end{eqnarray*}
+
+Assuming the \textsc{fm} demodulation process done by the transceiver, the sampling rate can be focused only on the bit rates in the signal.
+\begin{theorem} (\textsc{Nyquist-Shannon}~\cite{Nyquist}~\cite{Shannon})
+  \begin{eqnarray}
+    F_e \geq 2 \times \operatorname{max} \left \{ F_{b_1} ; F_{b_2} \right \}
+  \end{eqnarray}
+\end{theorem}
+
+\begin{remark}
+  \textsc{(optimal sampling)}
+  The previous theorem suggests that - for a digital signal - the base theoretical acquisition frequency is $0,5$ Hz per baud. In fact, we would need at least between $0,7$ and $0,8$ Hz per baud\cite{FV}.
+\end{remark}
+
+The \textsc{ni usb-6353} Acquisition Box on multi-channel is able to deliver a maximum sampling rate (aggregate) on multi-channel~\cite{NI_6353_datasheet} of
+\begin{eqnarray*}
+  F_{e_{\text{MAX}}} &=& 1.00 \text{ MS.s$^{-1}$}\\
+                &=& 1.00 \times 10^6 \text{ Hz}
+\end{eqnarray*}
+
+Considering that the acquisition will be done simultaneously, it is trivial that all channels have a sampling rate of $2 \times 2,4 \times 10^3 = 4,8 \times 10^3$ Hz (see previous theorem). We may notice however that other \textsc{dsp}s have a limit of $4 \times F_c$ due to computation overflow~\cite{TI_MSP430}.
+
+Finally using a sample rate of $10$ kHz is the most convenient choice we made.
 
 
+\chapter{Hardware used at IPGP}
 
-\begin{table}[h]
-\caption{Force, area, and pressure data for the experiment shown in
-Fig.~\ref{fig:geometry} and described by Eq.~\ref{eq:B}.  Agreement is
-typically within five percent.}
-\begin{center}
-\begin{tabular}{l @{\hspace{30pt}} c @{\hspace{18pt}} c}
-\hline\hline
-& Piston 1 & Piston 2 \\ \hline
-Avg. Force (N) & 4.40 & 2.25 \\
-Area (cm$^2$) & 6.16 & 2.25 \\
-$F/A$ (N/cm$^2$) & 0.714 & 0.717 \\
-\hline\hline
-\end{tabular}
-\end{center}
-\label{tab:pressure}
-\end{table}
-
-\section{Int\'egrit\'e et mise en route machine}
-
-\subsection{Informations sur la machine}
+\section{Measurement machine}
 
 Les logiciels suivants doivent \^etre install\'es et \'eventullement correctement configur\'es dans l'ordre\cite{NI_driver} suivant:
 \begin{enumerate}
@@ -1218,18 +978,20 @@ Il sera pr\'evu que la machine d'acquisition $-$ pr\'evue pour fonctionner 24h/2
     \end{itemize}
   }
 \end{itemize}
-\textsc{Dell Latitude atg D630}.
 
 Elle sera constemment connect\'ee sur le r\'eseau afin de permettre \`a l'\'equipe de surveiller et de rapatrier les donn\'ees acquises.
 
-\subsection{Syst\`eme d'avertissement et de gestion des erreurs}
+\section{Monitoring issues}
 
-\section{Conclusion}
-\label{sec:conclusion}
+\subsection{Rotating antenna}
+
+Skype...
+
+\subsection{Desktop remote control}
 
 \begin{thebibliography}{99}
 
-\bibitem{cecill}Commissariat à l'Energie Atomique, Centre National de la Recherche Scientifique, Institut National de Recherche en Informatique et en Automatique, {\it \href{http://www.cecill.info/licences/Licence_CeCILL_V2-en.html}{CeCILL Free Software License Agreement}} (September, 2006)
+\bibitem{cecill}Commissariat \'a l'Energie Atomique, Centre National de la Recherche Scientifique, Institut National de Recherche en Informatique et en Automatique, {\it \href{http://www.cecill.info/licences/Licence_CeCILL_V2-en.html}{CeCILL Free Software License Agreement}} (September, 2006)
 
 \bibitem{IITB_general}Saptarshi Bandyopadhyay, Jhonny Jha, Haripriya, Ameya Damle, Deepika Thakur, Sanyam Mulay, Prashant Sachdeva, Jaideep Joshi, Vaibhav Unhelkar, Yashovardhan Chati, Mayank Chaturvedi, Niranjan Parab, Manas Rachh, Shashank Tamaskar, Mallesh Bommanahal, Ashish Goel, Kartavya Neema, Subhasis Das, Vishnu Sresht, Ramnath Pai, Ankit Chiplunkar, {\it \href{http://www.aero.iitb.ac.in/pratham/otherdocs/IIT-B_Paper_Pratham_20thApr.pdf}{Introduction to Pratham, IIT Bombay’s Student Satellite Project}} (IIT Bombay, June 2010)
 
