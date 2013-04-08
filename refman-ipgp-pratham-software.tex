@@ -38,7 +38,7 @@
 \newtheorem{corollary}[theorem]{Corollary.}
 %\newtheorem{algorithm}[theorem]{Algorithme.}
 
-\newenvironment{implementation}[1][Impl\'ementation.]{\begin{trivlist}
+\newenvironment{implementation}[1][Implementation.]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
 
 \newenvironment{proof}[1][Proof.]{\begin{trivlist}
@@ -258,6 +258,8 @@ Eight channels ({ \color{oneblue}{blue} } arrows on the previous flowchart) will
 
 \noindent
 \textbf{Repository.} You can find the final software en environment in the \href{https://github.com/EmptyStackExn/ipgp-pratham-gs-essential}{\texttt{ipgp-pratham-gs-essential}} repository.
+
+Installation guides of the software system is provided in the specified repository.
 
 \section{Antenna rotor control}
 
@@ -957,21 +959,13 @@ Finally using a sample rate of $10$ kHz is the most convenient choice we made.
 
 \section{Measurement machine}
 
-Les logiciels suivants doivent \^etre install\'es et \'eventullement correctement configur\'es dans l'ordre\cite{NI_driver} suivant:
-\begin{enumerate}
-  \item{\href{http://digital.ni.com/src.nsf/websearch/968B3DF8AD48394D86257880005141A8?OpenDocument&node=node=203014_us}{LabVIEW 8.6 (National Instruments)}}
-  \item{\href{http://joule.ni.com/nidu/cds/view/p/id/2260/lang/fr}{NI DAQ-mx 9.2.3 (pilote du bo\^itier d'acquisition)}}
-  \item{\href{http://www.nlsa.com/uploads/nfw21v/nova_21v_download.html}{Nova for Windows 2.2c (NLSA)}}
-  \item{\href{http://protz.github.com/ocaml-installer/}{OCaml 3.12 pour Windows}}
-\end{enumerate}
-
-Il sera pr\'evu que la machine d'acquisition $-$ pr\'evue pour fonctionner 24h/24 durant 4 mois $-$ sera de type :
+The acquisition machine used at IPGP is suggested as the kind of 
 \begin{itemize}
-  \item{Mod\`ele : \href{http://support.dell.com/support/edocs/systems/latd630a/en/sm/index.htm}{Dell Latitude ATG D630}}
-  \item{Processeur : \href{http://ark.intel.com/products/29761/Intel-Core2-Duo-Processor-T7500-\%284M-Cache-2_20-GHz-800-MHz-FSB\%29}{Intel Core 2 Duo T7500 (2,2 GHz, 2,19 GHz)}}
-  \item{Syst\`eme d'exploitation : Microsoft Windows XP}
-  \item{Disque dur : \href{http://storage.toshiba.com/storagesolutions/archived-models/mk8046gsx}{Toshiba MK8046GSX} (74,3 Go dont 71,5 Go occup\'es) (rapidit\'e d'\'ecriture ?)}
-  \item{Carte r\'eseau :
+  \item{Model: \href{http://support.dell.com/support/edocs/systems/latd630a/en/sm/index.htm}{Dell Latitude ATG D630}}
+  \item{Processor: \href{http://ark.intel.com/products/29761/Intel-Core2-Duo-Processor-T7500-\%284M-Cache-2_20-GHz-800-MHz-FSB\%29}{Intel Core 2 Duo T7500 (2,2 GHz, 2,19 GHz)}}
+  \item{Operating system : Microsoft Windows XP}
+  \item{Hard disk: \href{http://storage.toshiba.com/storagesolutions/archived-models/mk8046gsx}{Toshiba MK8046GSX} (74,3 Go dont 71,5 Go occup\'es) (rapidit\'e d'\'ecriture ?)}
+  \item{Network card:
     \begin{itemize}
       \item{LAN: \href{http://www.broadcom.com/support/ethernet_nic/netlink_k57.php}{Broadcom NetXtreme 57xx Gigabit Controller}}
       \item{Wifi: \href{http://www.intel.com/products/wireless/prowireless_mobile.htm}{Intel PRO/Wireless 3945 ABG Network Connection}}
@@ -979,15 +973,24 @@ Il sera pr\'evu que la machine d'acquisition $-$ pr\'evue pour fonctionner 24h/2
   }
 \end{itemize}
 
-Elle sera constemment connect\'ee sur le r\'eseau afin de permettre \`a l'\'equipe de surveiller et de rapatrier les donn\'ees acquises.
-
 \section{Monitoring issues}
 
-\subsection{Rotating antenna}
+This section deals with additional features that aim to monitor the software/hardware system.
 
-Skype...
+\subsection{Rotor-based antenna}
+
+The antenna is usually out of order due to hard weather conditions. It is suggested to install a remote CCTV. The simplest way is to install a software like Skype and configure it in ``Auto answer'' mode with camera. The administrator will be able to monitor the state of the camera.
+
+\subsection{Acquisition software failure}
+
+The acquisition software is provided as experimental release and may contain bugs although all tests that have been made. When the system fails to run, an email is sent in order to aware the administrator.
 
 \subsection{Desktop remote control}
+
+It is highly suggested to give a remote control of the acquisition machine to the administrator in order to give him the possible of relauching the software in any case it would fail. For such purposes, it is possible to enable in Windows the remote control feature or use any other desktop remote software.
+
+We notice however that such remote control systems are dangerous and may be unsafe. The administrator in charge of the software system is in charge of network and security issues.
+
 
 \begin{thebibliography}{99}
 
